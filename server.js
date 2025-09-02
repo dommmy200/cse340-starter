@@ -29,7 +29,18 @@ app.use(static)
  ************************/
 app.get("/", (req, res) => {
   res.render("index", {
-    title: "Home"
+    title: "Home",
+    hero: {
+      title: "Welcome to CSE Motors!",
+      alt: "Delorean",
+      image: "/images/vehicles/delorean.jpg",
+    },
+    upgrades: [
+        {upgrade: "/images/upgrades/flux-cap.png", alt: "Flux Capacitor"},
+        {upgrade: "/images/upgrades/flame.jpg", alt: "Flame Decals"},
+        {upgrade: "/images/upgrades/bumper-sticker.jpg", alt: "Bumper Stickers"},
+        {upgrade: "/images/upgrades/hub-cap.jpg", alt: "Hub Caps"},
+      ]
   })
 })    
 
