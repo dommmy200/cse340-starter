@@ -22,7 +22,6 @@ body {
 .delorean-container {
   position: relative;
   width: 80%;
-  /* height: 300px; */
   margin: 0 auto;
   
 }
@@ -75,9 +74,6 @@ body {
   width: 45%;
   margin: 4px 5px;
   box-sizing: border-box;
-  /* min-width: 100px;
-  max-width: 400px; */
-  /* flex: 1; */
 }
 .div div {
   border: #000 solid 1px;
@@ -178,9 +174,6 @@ nav ul li a:hover {
     "top"
     "bottom";
     grid-template-columns: 1fr;
-    /* padding: 0; */
-    /* margin: 0; */
-    /* width: 100%; */
   }
   div.right {
     grid-area: top;
@@ -193,7 +186,6 @@ nav ul li a:hover {
     width: 100%;
   }
   .left, .right {
-    /* margin: 0 auto; */
     box-sizing: border-box; 
 
   }
