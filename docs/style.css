@@ -19,6 +19,14 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+.static-body {
+  background-color: #f7f3f3;
+  background-image: url("./images/site/small_check.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
 .delorean-container {
   position: relative;
   width: 80%;
