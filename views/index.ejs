@@ -1,8 +1,8 @@
 <section>
     <h1><%= hero.title %></h1>
-    <div>
+    <div class="delorean-container">
         <img src="<%= hero.image %>" alt="<%= hero.alt %>">
-        <div>
+        <div class="delorean-text">
             <h2>DMC Delorean</h2>
             <ul>
                 <li>3 Cups holders</li>
@@ -13,28 +13,35 @@
         </div>
     </div>
 </section>
-<section>
-    <div>
+<section class="bottom-section">
+    <div class="left">
         <h2>Delorean Upgrades</h2>
-        <div>
-            <div>
-                <img src="<%= upgrades[0].upgrade %>" alt="<%= upgrades[0].alt %>">
+            <div class="div">
+                <div>
+                    <img src="<%= upgrades[0].upgrade %>" alt="<%= upgrades[0].alt %>">
+                </div>
                 <button>Flux Capacitor</button>
             </div>
-            <div>
-                <img src="<%= upgrades[1].upgrade %>" alt="<%= upgrades[1].alt %>">
+            <div class="div">
+                <div>
+                    <img src="<%= upgrades[1].upgrade %>" alt="<%= upgrades[1].alt %>">
+                </div>
                 <button>Flame Decals</button>
             </div>
-            <div>
-                <img src="<%= upgrades[2].upgrade %>" alt="<%= upgrades[2].alt %>">
+            <div class="div">
+                <div>
+                    <img src="<%= upgrades[2].upgrade %>" alt="<%= upgrades[2].alt %>">
+                </div>
                 <button>Shiny Bumper</button>
             </div>
-            <div>
-                <img src="<%= upgrades[3].upgrade %>" alt="<%= upgrades[3].alt %>">
+            <div class="div">
+                <div>
+                    <img src="<%= upgrades[3].upgrade %>" alt="<%= upgrades[3].alt %>">
+                </div>
                 <button>Hub Caps</button>
             </div>  
     </div>
-    <div>
+    <div class="right">
         <h2>DMC Delorean Reviews</h2>
         <ul>
             <li>"So fast it's almost like traveling in time." (4/5)</li>
