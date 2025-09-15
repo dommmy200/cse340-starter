@@ -157,10 +157,9 @@ SELECT * FROM public.inventory
 ORDER BY inv_id ASC;
 
 
-
+-- ------------------------------------------------------------------------------------
 -- Database: 'cse 340 project', public schema
 -- Assignment 2, Task 2
-
 
 -- Drop and recreate ENUM type
 DROP TYPE IF EXISTS public.account_type CASCADE;
@@ -229,6 +228,20 @@ VALUES
     ('Truck'),
     ('Sedan')
 ON CONFLICT DO NOTHING;
+
+--Modify the "GM Hummer" record to read "a huge interior" rather than "small interiors" 
+--using a single query
+UPDATE public.inventory
+SET inv_description = REPLACE(inv_description, 'small interiors', 'a huge interior')
+WHERE inv_id = 10;
+
+--Update all records in the inventory table to add "/vehicles" to the middle of the 
+--file path in the inv_image and inv_thumbnail columns using a single query.
+UPDATE public.inventory
+SET 
+	inv_image = REPLACE(inv_image, '/image', '/image/vehicle'),
+	inv_thumbnail = REPLACE(inv_thumbnail, '/image', '/image/vehicle');
+-- ------------------------------------------------------------------------------------
 
 -- Queries to check data
 SELECT * FROM public.account ORDER BY account_id ASC;
