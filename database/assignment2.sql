@@ -34,5 +34,5 @@ WHERE public.inventory.classification_id = 2;
 
 UPDATE public.inventory
 SET 
-	inv_image = REPLACE(inv_image, '/image', '/image/vehicle'),
-	inv_thumbnail = REPLACE(inv_thumbnail, '/image', '/image/vehicle');
+	inv_image = REPLACE(inv_image, '/images', '/images/vehicles'),
+	inv_thumbnail = REPLACE(inv_thumbnail, '/images', '/images/vehicles');

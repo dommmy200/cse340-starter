@@ -30,7 +30,8 @@ app.set("layout", "./layouts/layout");
  *************************/
 app.use(static);
 // Favicon route
-app.use(favicon(path.join(process.cwd(), 'docs', 'images', 'site', 'favicon-32x32.ico')));
+app.use(favicon(path.join(process.cwd(), 'public',  'favicon-32x32.ico')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
