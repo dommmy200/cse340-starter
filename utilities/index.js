@@ -84,6 +84,28 @@ Util.buildClassificationGrid = async function(data){
   }
   return grid
 }
+/* ***********************************
+* Build Individual Vehicle View HTML
+************************************ */
+Util.buildInventoryItemGrid = async function (data) {
+  let item = data.row[0]
+  let grid;
+  if (grid.length > 0) {
+    grid = '<section class="inventory-item">'
+    grid += '<img src="'+ item.inv_image + 'alt="'+ item.inv_make + ' ' + item.inv_model +'">'
+    grid += '<div class="item-detail>'
+    grid += '<h1>'+ item.inv_make + ' ' + item.inv_model +' Details</h1>'
+    grid += '<p>Price:' + item.inv_price +'</p>'
+    grid += '<p>Description:' + inv_description + '</p>'
+    grid += '<p>Color:' + inv_color + '</p>'
+    grid += '<p>Miles:' + inv_miles + '</p>'
+    grid += '</div>'
+    grid += '</section>'
+  } else {
+    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return grid;
+}
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
