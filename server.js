@@ -25,6 +25,14 @@ app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout");
 
+app.use((req, res, next) => {
+  res.locals = {
+    images: "/images/site/icon.png",
+    year: new Date().getFullYear(),
+    siteName: "CSE Motors",
+  };
+  next();
+});
 /* ***********************
  * Routes
  *************************/
