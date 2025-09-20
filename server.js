@@ -50,16 +50,69 @@ app.use(async (req, res, next) => {
 * Express Error Handler
 * Place after all other middleware
 *************************/
+// app.use(async (err, req, res, next) => {
+  //   let nav = await utilities.getNav()
+  //   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  //   if (err.status == 404) {message: err.message} else { message = 'Oh no! There was a crash. Maybe try a different route?'}
+  //   res.render("errors/error", {
+    //     title: err.status || 'Server Error',
+    //     message: err.message,
+    //     nav
+    //   })
+    // })
+
+/* ************************************************
+* Enhanced and more general Express Error Handler *
+***************************************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if (err.status == 404) {message: err.message} else { message = 'Oh no! There was a crash. Maybe try a different route?'}
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message: err.message,
-    nav
-  })
-})
+  try {
+    // Build any shared UI elements (navigation, footer, etc.)
+    const nav = await utilities.getNav();
+    const footer = utilities.getFooter?.(); // Example: optional footer helper
+
+    // Log the error for debugging
+    console.error(`Error at "${req.originalUrl}":`, err);
+
+    // Decide on status and user-facing message
+    let status = err.status || 500;
+    let message;
+
+    switch (status) {
+      case 400:
+        message = "Bad Request. Please check your input.";
+        break;
+      case 401:
+        message = "Unauthorized. Please log in to continue.";
+        break;
+      case 403:
+        message = "Forbidden. You don't have permission to view this resource.";
+        break;
+      case 404:
+        message = err.message || "Page not found.";
+        break;
+      case 500:
+      default:
+        message = err.message || "Oh no! There was a crash. Please try again.";
+        break;
+    }
+
+    // Render custom error view
+    res.status(status).render("errors/error", {
+      title: `${status} Error`,
+      message,
+      nav,
+      footer: `${status} Error`, // Other shared elements like footer, header... can be included
+      stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    });
+  } catch (handlerError) {
+    // If something fails *inside* the error handler itself
+    console.error("Error while handling error:", handlerError);
+    res
+      .status(500)
+      .send("Critical failure while handling an error. Please try later.");
+  }
+});
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file

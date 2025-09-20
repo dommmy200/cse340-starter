@@ -167,6 +167,45 @@ nav ul li a {
 nav ul li a:hover {
   text-decoration: underline;
 }
+/******* Inventory Item Styles ***************/
+.inventory-item {
+  display: flex;
+  flex-direction: row;
+}
+.item-detail {
+  display: flex;
+  flex-direction: column;
+}
+.item-detail p:nth-child(1) {
+  font-weight: bold;
+  padding-left: 2px;
+}
+.item-detail p:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.item-detail p {
+  padding-left: 10px;
+  height: 80x;
+  margin-top: 0;
+}
+/******* Classification Styles ***************/
+#inv-display {
+  list-style: none;
+}
+/******* Footer Styles ***************/
+.copyright {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.copyright div {
+  text-align: center;
+  padding: 25px 0 0 10px;
+}
+.copyright img {
+  border: #000 solid 1px;
+}
+/******* Small Screen Styles ***************/
 @media (max-width: 768px) {
   .bottom-section {
     display: grid;
@@ -187,9 +226,12 @@ nav ul li a:hover {
   }
   .left, .right {
     box-sizing: border-box; 
-
+    
   }
   .right ul {
     margin-left: 10px;
+  }
+  .inventory-item, .copyright {
+    flex-direction: column;
   }
 }

@@ -14,8 +14,6 @@ const Util = {}
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  // show the returned data in the terminal
-  console.log(data);
   
   // Dynamically construct the unordered list with info from the fetched data
   let list = "<ul>"
@@ -45,6 +43,19 @@ Util.getHero = function (req, res, next) {
     return hero;
 }
 
+Util.getFooter = function (req, res, next) {
+  const d = new Date()
+  let year = d.getFullYear()
+  const list = `
+        <div class="copyright">
+          <img src="/images/site/icon.png" alt="Site image">
+          <div>
+            <span>&copy${year}</span><span> | CSE 340 App</span>
+          </div>
+        </div>`
+  return list;
+}
+
 Util.upgrades = [
     {upgrade: '/images/upgrades/flux-cap.png', alt: 'Flux Capacitor'},
     {upgrade: '/images/upgrades/flame.jpg', alt: 'Flame Decals'},
@@ -61,7 +72,7 @@ Util.buildClassificationGrid = async function(data){
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => { 
       grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
+      grid +=  '<a href="/inv/detail/'+ vehicle.inv_id 
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
       + 'details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
@@ -69,7 +80,7 @@ Util.buildClassificationGrid = async function(data){
       grid += '<div class="namePrice">'
       grid += '<hr />'
       grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
+      grid += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
       grid += '</h2>'
@@ -87,23 +98,22 @@ Util.buildClassificationGrid = async function(data){
 /* ***********************************
 * Build Individual Vehicle View HTML
 ************************************ */
-Util.buildInventoryItemGrid = async function (data) {
-  let item = data.row[0]
-  let grid;
-  if (grid.length > 0) {
-    grid = '<section class="inventory-item">'
-    grid += '<img src="'+ item.inv_image + 'alt="'+ item.inv_make + ' ' + item.inv_model +'">'
-    grid += '<div class="item-detail>'
-    grid += '<h1>'+ item.inv_make + ' ' + item.inv_model +' Details</h1>'
-    grid += '<p>Price:' + item.inv_price +'</p>'
-    grid += '<p>Description:' + inv_description + '</p>'
-    grid += '<p>Color:' + inv_color + '</p>'
-    grid += '<p>Miles:' + inv_miles + '</p>'
-    grid += '</div>'
-    grid += '</section>'
-  } else {
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+Util.buildInventoryItemGrid = async function (item) {
+  if (!item) {
+    return '<p>No inventory item found.</p>';
   }
+
+  let grid = '<section class="inventory-item">';
+  grid += `<img src="${item.inv_image}" alt="${item.inv_make} ${item.inv_model}">`;
+  grid += '<div class="item-detail">';
+  grid += `<p>${item.inv_make} ${item.inv_model} Details</p>`;
+  grid += `<p>Price: $${new Intl.NumberFormat('en-US').format(item.inv_price)}</p>`;
+  grid += `<p>Description: ${item.inv_description}</p>`;
+  grid += `<p>Color: ${item.inv_color}</p>`;
+  grid += `<p>Miles: ${item.inv_miles}</p>`;
+  grid += '</div>';
+  grid += '</section>';
+
   return grid;
 }
 /* ****************************************

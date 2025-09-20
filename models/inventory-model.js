@@ -33,8 +33,12 @@ async function getItemByInventoryId(inv_id) {
       `SELECT * FROM public.inventory AS i 
       WHERE i.inv_id = $1`,
       [inv_id]
-    )
-    return data.rows[0]
+    );
+    console.log("Row count: ", data.rowCount, "Inventory Item: ", data.rows[0])
+    if (data.rowCount === 0) {
+    throw new Error(`Item with ID ${inv_id} not found`);
+  }
+    return data.rows[0];
   } catch (error) {
     console.error("getinventorybyid error " + error)
   }
