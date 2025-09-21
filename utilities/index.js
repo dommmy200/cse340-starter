@@ -78,7 +78,6 @@ Util.buildClassificationGrid = async function(data){
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
       +' on CSE Motors" /></a>'
       grid += '<div class="namePrice">'
-      grid += '<hr />'
       grid += '<h2>'
       grid += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
@@ -88,6 +87,7 @@ Util.buildClassificationGrid = async function(data){
       + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
       grid += '</div>'
       grid += '</li>'
+      grid += '<hr />'
     })
     grid += '</ul>'
   } else { 
