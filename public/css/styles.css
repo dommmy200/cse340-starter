@@ -188,6 +188,11 @@ nav ul li a:hover {
   height: 80x;
   margin-top: 0;
 }
+/******* Flash Styles ***************/
+.notice {
+  color: red;
+  border: #000 solid 1px;
+}
 /******* Classification Styles ***************/
 #inv-display {
   list-style: none;

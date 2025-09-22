@@ -11,7 +11,7 @@ require("dotenv").config();
 let pool
 if (process.env.NODE_ENV == "development") {
     pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: process.env.DATABASE_URL || 'postgresql://dom340_user:NVRIrKl3uZeFqpeT1mLFRp5Y78MQ9c8t@dpg-d33umogdl3ps7396sbbg-a.frankfurt-postgres.render.com/dom340',
         ssl: {
             rejectUnauthorized: false,
         },
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV == "development") {
     }
 } else {
     pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: process.env.DATABASE_URL || 'postgresql://dom340_user:NVRIrKl3uZeFqpeT1mLFRp5Y78MQ9c8t@dpg-d33umogdl3ps7396sbbg-a.frankfurt-postgres.render.com/dom340',
     })
     module.exports = pool
 }

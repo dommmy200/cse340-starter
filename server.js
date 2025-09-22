@@ -10,6 +10,8 @@ const favicon = require('serve-favicon');
 const path = require('path');
 const express = require("express");
 const app = express();
+const session = require('express-session');
+const pool = require('./database/index')
 
 const env = require("dotenv").config();
 const utilities = require('./utilities');
@@ -34,6 +36,19 @@ app.use((req, res, next) => {
   next();
 });
 /* ***********************
+ * View Engine and Templates
+ *************************/
+app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+/* ***********************
  * Routes
  *************************/
 app.use(static);
@@ -54,6 +69,13 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.message = require('express-messages')(req, res)
+  next()
+})
+
 /* ***********************
 * Express Error Handler
 * Place after all other middleware
