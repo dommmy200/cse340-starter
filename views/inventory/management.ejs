@@ -1,0 +1,17 @@
+
+<h1><%= title %></h1>
+
+<!-- Flash Messages -->
+<% if (messages) { %>
+  <% for (let type in messages) { %>
+    <% messages[type].forEach(function(msg) { %>
+      <div class="flash <%= type %>"><%= msg %></div>
+    <% }) %>
+  <% } %>
+<% } %>
+
+<!-- Vehicle Management Grid -->
+<%- VehicleMgtGrid %> 
+
+
+

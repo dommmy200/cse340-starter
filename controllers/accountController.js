@@ -10,6 +10,8 @@ const accountController = {}
 accountController.displayLoginForm = async function (req, res, next) {
     let nav = await utilities.getNav();
     const loginGrid = await utilities.buildLoginGrid();
+
+    req.flash("notice", "Successfully login.")
     
     res.render("./account/login", {
         title: 'Login',
@@ -20,6 +22,8 @@ accountController.displayLoginForm = async function (req, res, next) {
 accountController.buildRegister = async function (req, res, next) {
     let nav = await utilities.getNav();
     const registerGrid = await utilities.buildRegisterGrid();
+
+    req.flash("notice", "Required fiels are mandatory")
     
     res.render("./account/register", {
         title: 'Register',

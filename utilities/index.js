@@ -34,6 +34,36 @@ Util.getNav = async function (req, res, next) {
   return list
 };
 
+// Util.getNav = async function () {
+//   let data = await invModel.getClassifications()
+//   let list = "<ul>"
+
+//   // Home link
+//   list += '<li><a href="/">Home</a></li>'
+
+//   // Classification links
+//   data.rows.forEach((row) => {
+//     console.log("✅ getNav called");
+//     list += `<li>
+//       <a href="/inv/type/${row.classification_id}" 
+//          title="See our inventory of ${row.classification_name} vehicles">
+//          ${row.classification_name}
+//       </a>
+//     </li>`
+//   })
+
+//   // Vehicle Management (admin functions)
+//   list += `<li><a href="/inv/management">Management</a></li>`
+
+//   // Account links
+//   list += `<li><a href="/account/login">Login</a></li>`
+//   list += `<li><a href="/account/register">Register</a></li>`
+
+//   list += "</ul>"
+//   return list
+// }
+
+
 Util.getHero = function (req, res, next) {
    const hero = {
             title: 'Welcome to CSE Motors!',
@@ -168,6 +198,195 @@ Util.buildLoginGrid = async function () {
   
   return grid;
 }
+Util.buildAddClassificationGrid = async function () {
+  let grid = `
+    <form action="/inv/add-classification" method="POST">
+      <label for="classification_name">Classification Name:</label>
+      <input type="text" name="classification_name" id="classification_name" required>
+      <button type="submit">Add Classification</button>
+    </form>
+  `
+  return grid
+}
+
+Util.buildNewVehicleGrid = async function () {
+  let inventoryGrid = `
+  <form action="/inv/add-inventory" method="POST">
+  <label for="classification_id">Classification:</label>
+  <%- classificationList %>  
+  
+  <label for="inv_make">Make:</label>
+  <input type="text" name="inv_make" id="inv_make" required>
+  
+  <label for="inv_model">Model:</label>
+  <input type="text" name="inv_model" id="inv_model" required>
+  
+  <label for="inv_year">Year:</label>
+  <input type="number" name="inv_year" id="inv_year" required>
+  
+  <label for="inv_price">Price:</label>
+  <input type="number" name="inv_price" id="inv_price" required>
+  
+  <button type="submit">Add Vehicle</button>
+  </form>
+
+
+
+  <form action="/inv/add-vehicle" method="POST" class="container mt-4">
+
+  <!-- Classification -->
+  <div class="mb-3">
+    <label for="classification_id" class="form-label">Classification</label>
+    <select name="classification_id" id="classification_id" class="form-select" required>
+      <option value="">-- Choose Classification --</option>
+      <% classifications.forEach(classification => { %>
+        <option value="<%= classification.classification_id %>">
+          <%= classification.classification_name %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <!-- Make -->
+  <div class="mb-3">
+    <label for="inv_make" class="form-label">Make</label>
+    <input 
+      type="text" 
+      name="inv_make" 
+      id="inv_make" 
+      class="form-control"
+      placeholder="Enter vehicle make (min 3 chars)" 
+      minlength="3" 
+      required
+    >
+  </div>
+
+  <!-- Model -->
+  <div class="mb-3">
+    <label for="inv_model" class="form-label">Model</label>
+    <input 
+      type="text" 
+      name="inv_model" 
+      id="inv_model" 
+      class="form-control"
+      placeholder="Enter vehicle model (min 3 chars)" 
+      minlength="3" 
+      required
+    >
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3">
+    <label for="inv_description" class="form-label">Description</label>
+    <textarea 
+      name="inv_description" 
+      id="inv_description" 
+      class="form-control"
+      rows="4"
+      placeholder="Enter vehicle description" 
+      required
+    ></textarea>
+  </div>
+
+  <!-- Image Path -->
+  <div class="mb-3">
+    <label for="inv_image" class="form-label">Image Path</label>
+    <input 
+      type="text" 
+      name="inv_image" 
+      id="inv_image" 
+      class="form-control"
+      value="/images/vehicle/no-image.png"
+      required
+    >
+  </div>
+
+  <!-- Thumbnail Path -->
+  <div class="mb-3">
+    <label for="inv_thumbnail" class="form-label">Thumbnail Path</label>
+    <input 
+      type="text" 
+      name="inv_thumbnail" 
+      id="inv_thumbnail" 
+      class="form-control"
+      value="/images/vehicle/no-image.png"
+      required
+    >
+  </div>
+
+  <!-- Price -->
+  <div class="mb-3">
+    <label for="inv_price" class="form-label">Price</label>
+    <input 
+      type="number" 
+      name="inv_price" 
+      id="inv_price" 
+      class="form-control"
+      placeholder="Enter price (integer or decimal)" 
+      step="0.01"
+      required
+    >
+  </div>
+
+  <!-- Year -->
+  <div class="mb-3">
+    <label for="inv_year" class="form-label">Year</label>
+    <input 
+      type="number" 
+      name="inv_year" 
+      id="inv_year" 
+      class="form-control"
+      placeholder="4-digit year" 
+      min="1900" 
+      max="2099" 
+      required
+    >
+  </div>
+
+  <!-- Miles -->
+  <div class="mb-3">
+    <label for="inv_miles" class="form-label">Miles</label>
+    <input 
+      type="number" 
+      name="inv_miles" 
+      id="inv_miles" 
+      class="form-control"
+      placeholder="Enter mileage (digits only)" 
+      min="0" 
+      required
+    >
+  </div>
+
+  <!-- Color -->
+  <div class="mb-3">
+    <label for="inv_color" class="form-label">Color</label>
+    <input 
+      type="text" 
+      name="inv_color" 
+      id="inv_color" 
+      class="form-control"
+      placeholder="Enter vehicle color" 
+      required
+    >
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" class="btn btn-primary">Add Vehicle</button>
+</form>
+
+  `
+  return inventoryGrid
+}
+
+Util.buildVehicleManagementGrid = async function () {
+  let MgtGrid = `
+    <ul>
+      <li><a href="/inv/add-classification">Add New Classification</a></li>
+      <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
+    </ul>
+  `
+  return MgtGrid
+}  
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

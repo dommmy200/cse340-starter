@@ -289,6 +289,42 @@ form button:hover {
 .copyright img {
   border: #000 solid 1px;
 }
+/******* flash Styles ***************/
+/* Flash Messages */
+.flash {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Success (green) */
+.flash.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Error (red) */
+.flash.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Info (blue) */
+.flash.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* Warning (yellow) */
+.flash.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
 /******* Small Screen Styles ***************/
 @media (max-width: 768px) {
   .bottom-section {

@@ -5,8 +5,13 @@ baseController.buildHome = async function(req, res){
   const nav = await utilities.getNav();
   const hero = utilities.getHero();
   const upgrades = utilities.upgrades;
-  req.flash("notice", "This is a flash message.")
-  res.render("index", {title: "Home", nav, hero, upgrades});
+  req.flash("notice", "Welcome to Homepage!")
+  res.render("index", {
+    title: "Home",
+    nav, 
+    hero, 
+    upgrades
+  });
 };
 
 module.exports = baseController;

@@ -1,0 +1,20 @@
+
+<% if (title) { %>
+  <h1><%= title %></h1>
+
+  <% if (messages.error) { %>
+    <% messages.error.forEach(function(msg) { %>
+      <div class="flash error"><%= msg %></div>
+    <% }) %>
+  <% } %>
+
+  <% if (messages.success) { %>
+    <% messages.success.forEach(function(msg) { %>
+      <div class="flash success"><%= msg %></div>
+    <% }) %>
+  <% } %>
+
+  <%- classificationGrid %> 
+<% } else { %>
+  <% res.redirect('/') %>
+<% } %>

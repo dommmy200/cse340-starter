@@ -74,6 +74,7 @@ app.use(express.static(path.join(process.cwd(), 'public')))
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+app.use("/inventory", inventoryRoute)
 // Login routes
 app.use("/account", accountRoute)
 
