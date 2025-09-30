@@ -116,6 +116,58 @@ Util.buildInventoryItemGrid = async function (item) {
 
   return grid;
 }
+/* ***********************************
+* Build Login View HTML
+************************************ */
+Util.buildRegisterGrid = async function () {
+
+  let grid = `<div class="register">`
+  grid += `<h2>ALL FIELDS ARE REQUIRED</h2>`
+  grid +=`<form action="/account/register" method="post">`
+  grid += `<div class="form-group">`
+  grid += '<label for="firstname">First Name</label>'
+  grid += `<input type="text" id="firstname" name="account_firstname" required>`
+  grid += `</div>`
+  grid += `<div class="form-group">`
+  grid += '<label for="lastname">Last Name</label>'
+  grid += `<input type="text" id="lastname" name="account_lastname" required>`
+  grid += `</div>`
+  grid += `<div class="form-group">`
+  grid += '<label for="username">Username</label>'
+  grid += `<input type="text" id="username" name="account_email" required>`
+  grid += `</div>`
+  grid += `<div class="form-group">`
+  grid += `<label for="password">Password</label>`
+  grid += `<input type="password" id="password" class="password" name="account_password" required>`
+  grid += `</div>`
+  grid += `<p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
+  grid += `<button type="submit" id="register">Register</button>`
+  grid += `<button type="button" id="togglePassword">Show Password</button>`
+  grid += `</form>`
+  grid += `</div>`
+  grid +=  `<script src="/js/script.js" defer></script>`
+
+  return grid;
+}
+Util.buildLoginGrid = async function () {
+
+  let grid = `<form action="/login" method="post">`
+  grid += `<div class="form-group">`
+  grid += '<label for="username">Username</label>'
+  grid += `<input type="text" id="username" name="account_email" required>`
+  grid += `</div>`
+  grid += `<div class="form-group">`
+  grid += `<label for="password">Password</label>`
+  grid += `<input type="password" id="password" name="account_password" required>`
+  grid += `</div>`
+  grid += `<button type="submit">Log In</button>`
+  grid += `<div class="signup-link">`
+  grid += `<p>Don't have an account? <a href="/account/register">Sign up here</a></p>`
+  grid += `</div>`
+  grid +=  `</form>`
+  
+  return grid;
+}
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

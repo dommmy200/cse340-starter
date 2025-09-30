@@ -228,6 +228,54 @@ nav ul li a:hover {
     border-radius: 0 0 10px 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+/******* Form Styles ***************/
+ form, .form-group, form button {
+  border-radius: 8px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  background-color: antiquewhite;
+  color: #000;
+  width: 70%;
+  margin: 20px auto;
+  padding: 15px;
+}
+.form-group {
+  padding-top: 1rem;
+  width: 400px;
+  height: 60px;
+  color: #000000;
+  margin: 10px auto;
+  background-color: rgb(170, 157, 122);
+  text-align: center;
+}
+form button {
+  background-color: rgb(212, 157, 118);
+  cursor: pointer;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 900;
+  font-size: larger;
+  width: 200px;
+  margin: 0 auto;
+}
+.form-group label {
+  margin-right: 8px;
+}
+.form-group + p {
+  width: 70%;
+  height: auto;
+  font-size: large;
+  margin: 10px auto;
+}
+form button:hover {
+  border: #000 solid 1px;
+}
+#togglePassword {
+  margin-top: 15px;
+}
 /******* Footer Styles ***************/
 .copyright {
   display: flex;

@@ -6,26 +6,36 @@
 /* ***********************
  * Require Statements
  *************************/
-const favicon = require('serve-favicon');
-const path = require('path');
-const express = require("express");
-const app = express();
-const session = require('express-session');
+const favicon = require('serve-favicon')
+const path = require('path')
+const express = require("express")
+const app = express()
+const session = require('express-session')
 const pool = require('./database/index')
 
-const env = require("dotenv").config();
-const utilities = require('./utilities');
-const static = require("./routes/static");
-const inventoryRoute = require('./routes/inventoryRoute');
-const expressLayouts = require("express-ejs-layouts");
-const baseController = require('./controllers/baseController');
+const env = require("dotenv").config()
+const utilities = require('./utilities')
+const static = require("./routes/static")
+const inventoryRoute = require('./routes/inventoryRoute')
+const accountRoute = require('./routes/accountRoute')
+const expressLayouts = require("express-ejs-layouts")
+const baseController = require('./controllers/baseController')
+
+/* ***********************
+ * Parsers
+ *************************/
+// Parse URL-encoded bodies (for form data)
+app.use(express.urlencoded({ extended: true }));
+// Parse JSON bodies (if you also handle JSON requests)
+app.use(express.json());
+
 
 /* ***********************
  * View Engine and Templates
  *************************/
-app.set("view engine", "ejs");
-app.use(expressLayouts);
-app.set("layout", "./layouts/layout");
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout")
 
 app.use((req, res, next) => {
   res.locals = {
@@ -33,10 +43,10 @@ app.use((req, res, next) => {
     year: new Date().getFullYear(),
     siteName: "CSE Motors",
   };
-  next();
-});
+  next()
+})
 /* ***********************
- * View Engine and Templates
+ * View Session
  *************************/
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
@@ -48,48 +58,35 @@ app.use(session({
   saveUninitialized: true,
   name: 'sessionId',
 }))
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
 /* ***********************
  * Routes
  *************************/
-app.use(static);
+app.use(static)
 // Favicon route
-app.use(favicon(path.join(process.cwd(), 'public',  'favicon-32x32.ico')));
-app.use(express.static(path.join(process.cwd(), 'public')));
+app.use(favicon(path.join(process.cwd(), 'public',  'favicon-32x32.ico')))
+app.use(express.static(path.join(process.cwd(), 'public')))
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+// Login routes
+app.use("/account", accountRoute)
 
 /* ***********************
  * Route to render the home page
  ************************/
 //Index route
-app.get("/", utilities.handleErrors(baseController.buildHome));
+app.get("/", utilities.handleErrors(baseController.buildHome))
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
-// Express Messages Middleware
-app.use(require('connect-flash')())
-app.use(function(req, res, next){
-  res.locals.message = require('express-messages')(req, res)
-  next()
-})
-
-/* ***********************
-* Express Error Handler
-* Place after all other middleware
-*************************/
-// app.use(async (err, req, res, next) => {
-  //   let nav = await utilities.getNav()
-  //   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  //   if (err.status == 404) {message: err.message} else { message = 'Oh no! There was a crash. Maybe try a different route?'}
-  //   res.render("errors/error", {
-    //     title: err.status || 'Server Error',
-    //     message: err.message,
-    //     nav
-    //   })
-    // })
 
 /* ************************************************
 * Enhanced and more general Express Error Handler *
@@ -97,11 +94,11 @@ app.use(function(req, res, next){
 app.use(async (err, req, res, next) => {
   try {
     // Build any shared UI elements (navigation, footer, etc.)
-    const nav = await utilities.getNav();
-    const footer = utilities.getFooter?.(); // Example: optional footer helper
+    const nav = await utilities.getNav()
+    const footer = utilities.getFooter?.() // Example: optional footer helper
 
     // Log the error for debugging
-    console.error(`Error at "${req.originalUrl}":`, err);
+    console.error(`Error at "${req.originalUrl}":`, err)
 
     // Decide on status and user-facing message
     let status = err.status || 500;
@@ -133,15 +130,15 @@ app.use(async (err, req, res, next) => {
       nav,
       footer: `${status} Error`, // Other shared elements like footer, header... can be included
       stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
-    });
+    })
   } catch (handlerError) {
     // If something fails *inside* the error handler itself
-    console.error("Error while handling error:", handlerError);
+    console.error("Error while handling error:", handlerError)
     res
       .status(500)
-      .send("Critical failure while handling an error. Please try later.");
+      .send("Critical failure while handling an error. Please try later.")
   }
-});
+})
 
 /* ***********************
  * Local Server Information
@@ -153,5 +150,5 @@ const port = process.env.PORT || 3000
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${port}`)
-});
+  console.log(`Server listening on ${port}`)
+})

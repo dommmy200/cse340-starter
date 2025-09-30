@@ -5,7 +5,7 @@ baseController.buildHome = async function(req, res){
   const nav = await utilities.getNav();
   const hero = utilities.getHero();
   const upgrades = utilities.upgrades;
-  req.flash('notice', 'This is a flash message.')
+  req.flash("notice", "This is a flash message.")
   res.render("index", {title: "Home", nav, hero, upgrades});
 };
 

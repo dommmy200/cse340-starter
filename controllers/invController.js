@@ -4,11 +4,11 @@ const utilities = require("../utilities/")
 const invCont = {}
 
 /* ***************************
- *  Build inventory by classification view
+ *  Build inventory by inventory view
  * ************************** */
 invCont.buildByInventoryId = async function (req, res, next) {
   const invId = parseInt(req.params.invId, 10); // Convert to integer
-console.log(invId);
+  console.log(invId);
   const data = await invModel.getItemByInventoryId(invId);
   const itemGrid = await utilities.buildInventoryItemGrid(data);
   let nav = await utilities.getNav();
