@@ -163,8 +163,8 @@ Util.buildRegisterGrid = async function () {
   grid += `<input type="text" id="lastname" name="account_lastname" required>`
   grid += `</div>`
   grid += `<div class="form-group">`
-  grid += '<label for="username">Username</label>'
-  grid += `<input type="text" id="username" name="account_email" required>`
+  grid += '<label for="username">Email</label>'
+  grid += `<input type="email" id="username" name="account_email" required>`
   grid += `</div>`
   grid += `<div class="form-group">`
   grid += `<label for="password">Password</label>`
@@ -181,20 +181,23 @@ Util.buildRegisterGrid = async function () {
 }
 Util.buildLoginGrid = async function () {
 
-  let grid = `<form action="/login" method="post">`
+  let grid = `<form action="/account/login/test" method="POST">`
   grid += `<div class="form-group">`
-  grid += '<label for="username">Username</label>'
+  grid += '<label for="username">Enter Email</label>'
   grid += `<input type="text" id="username" name="account_email" required>`
   grid += `</div>`
   grid += `<div class="form-group">`
   grid += `<label for="password">Password</label>`
   grid += `<input type="password" id="password" name="account_password" required>`
+  grid += `<p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
+  grid += `<button>Show Password</button>`
   grid += `</div>`
   grid += `<button type="submit">Log In</button>`
   grid += `<div class="signup-link">`
-  grid += `<p>Don't have an account? <a href="/account/register">Sign up here</a></p>`
+  grid += `<p>No Account? <a href="/account/register">Sign Up Here!</a></p>`
   grid += `</div>`
   grid +=  `</form>`
+  grid +=  `<script src="/js/script.js" defer></script>`
   
   return grid;
 }
@@ -211,27 +214,6 @@ Util.buildAddClassificationGrid = async function () {
 
 Util.buildNewVehicleGrid = async function () {
   let inventoryGrid = `
-  <form action="/inv/add-inventory" method="POST">
-  <label for="classification_id">Classification:</label>
-  <%- classificationList %>  
-  
-  <label for="inv_make">Make:</label>
-  <input type="text" name="inv_make" id="inv_make" required>
-  
-  <label for="inv_model">Model:</label>
-  <input type="text" name="inv_model" id="inv_model" required>
-  
-  <label for="inv_year">Year:</label>
-  <input type="number" name="inv_year" id="inv_year" required>
-  
-  <label for="inv_price">Price:</label>
-  <input type="number" name="inv_price" id="inv_price" required>
-  
-  <button type="submit">Add Vehicle</button>
-  </form>
-
-
-
   <form action="/inv/add-vehicle" method="POST" class="container mt-4">
 
   <!-- Classification -->
@@ -386,7 +368,13 @@ Util.buildVehicleManagementGrid = async function () {
     </ul>
   `
   return MgtGrid
-}  
+}
+
+Util.loginSuccessGrid = async () => {
+  let successGrid = `
+  <p>You're logged in successfully!</p>`
+  return successGrid
+}
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

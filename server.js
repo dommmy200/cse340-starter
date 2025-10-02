@@ -20,6 +20,7 @@ const inventoryRoute = require('./routes/inventoryRoute')
 const accountRoute = require('./routes/accountRoute')
 const expressLayouts = require("express-ejs-layouts")
 const baseController = require('./controllers/baseController')
+const cookieParser = require('cookie-parser')
 
 /* ***********************
  * Parsers
@@ -28,6 +29,7 @@ const baseController = require('./controllers/baseController')
 app.use(express.urlencoded({ extended: true }));
 // Parse JSON bodies (if you also handle JSON requests)
 app.use(express.json());
+app.use(cookieParser())
 
 
 /* ***********************
@@ -152,4 +154,5 @@ const port = process.env.PORT || 3000
  *************************/
 app.listen(port, () => {
   console.log(`Server listening on ${port}`)
+  console.log('Start here: '+'http://localhost:'+port+'/')
 })
