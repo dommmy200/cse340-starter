@@ -24,4 +24,14 @@ router.post("/add-classification",  checkClassificationValidation, utilities.han
 router.get("/add-inventory", utilities.handleErrors(invController.showAddVehicle))
 router.post("/add-inventory", checkInventoryValidation, utilities.handleErrors(invController.addVehicle))
 
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView))
+router.post("/update", utilities.handleErrors(invController.updateInventory))
+
+router.get("/delete/:inv_id", utilities.handleErrors(invController.deleteInventoryView))
+router.post("/delete", utilities.handleErrors(invController.deleteInventory))
+
+
+
 module.exports = router;

@@ -190,7 +190,7 @@ Util.buildLoginGrid = async function () {
   grid += `<label for="password">Password</label>`
   grid += `<input type="password" id="password" name="account_password" required>`
   grid += `<p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
-  grid += `<button>Show Password</button>`
+  grid += `<button id='togglePassword'>Show Password</button>`
   grid += `</div>`
   grid += `<button type="submit">Log In</button>`
   grid += `<div class="signup-link">`
@@ -362,7 +362,7 @@ Util.buildNewVehicleGrid = async function () {
 
 Util.buildVehicleManagementGrid = async function () {
   let MgtGrid = `
-    <ul>
+   <ul>
       <li><a href="/inv/add-classification">Add New Classification</a></li>
       <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
     </ul>
@@ -375,6 +375,18 @@ Util.loginSuccessGrid = async () => {
   <p>You're logged in successfully!</p>`
   return successGrid
 }
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+ Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+ }
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

@@ -1,0 +1,18 @@
+<h1><%= title %></h1>
+<form method="POST" action="/inv/update">
+  <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+
+  <label for="inv_make">Make</label>
+  <input type="text" name="inv_make" value="<%= item.inv_make %>" required>
+
+  <label for="inv_model">Model</label>
+  <input type="text" name="inv_model" value="<%= item.inv_model %>" required>
+
+  <label for="inv_year">Year</label>
+  <input type="number" name="inv_year" value="<%= item.inv_year %>" required>
+
+  <label for="inv_price">Price</label>
+  <input type="number" name="inv_price" value="<%= item.inv_price %>" required>
+
+  <button type="submit">Save Changes</button>
+</form>

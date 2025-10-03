@@ -1,12 +1,12 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 
-const invCont = {}
+const inverterController = {}
 
 /* ***************************
  *  Build inventory by inventory view
  * ************************** */
-invCont.buildByInventoryId = async function (req, res, next) {
+inverterController.buildByInventoryId = async function (req, res, next) {
   const invId = parseInt(req.params.invId, 10); // Convert to integer
   console.log(invId);
   const data = await invModel.getItemByInventoryId(invId);
@@ -23,7 +23,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
 /* ***************************
  *  Build inventory by classification view
  * ************************** */
-invCont.buildByClassificationId = async function (req, res, next) {
+inverterController.buildByClassificationId = async function (req, res, next) {
   const classification_id = req.params.classificationId;
   const data = await invModel.getInventoryByClassificationId(classification_id);
   const grid = await utilities.buildClassificationGrid(data);
@@ -36,20 +36,30 @@ invCont.buildByClassificationId = async function (req, res, next) {
     grid
   })
 }
-invCont.buildManagementView = async function (req, res, next) {
-  let nav = await utilities.getNav()
-  const VehicleMgtGrid = await utilities.buildVehicleManagementGrid()
-  res.render("inventory/management", {
-    title: "Vehicle Management",
-    nav,
-    messages: req.flash(),
-    VehicleMgtGrid
-  })
+
+/* ***************************
+ *  Build Mgt View
+ * ************************** */
+inverterController.buildManagementView = async function (req, res, next) {
+  try {
+    let nav = await utilities.getNav()
+    const VehicleMgtGrid = await utilities.buildVehicleManagementGrid()
+    const classifications = await invModel.getClassificationsFunction()
+    res.render("inventory/management", {
+      title: "Vehicle Management",
+      nav,
+      messages: req.flash(),
+      VehicleMgtGrid,
+      classifications //pass to view
+    })
+  } catch (err) {
+    next(err)
+  }
 }
 /* ***************************
  *  Show Add Classification form
  * ************************** */
-invCont.showAddClassification = async function (req, res, next) {
+inverterController.showAddClassification = async function (req, res, next) {
   let nav = await utilities.getNav()
   const classificationGrid = await utilities.buildAddClassificationGrid()
 
@@ -64,7 +74,7 @@ invCont.showAddClassification = async function (req, res, next) {
 /* ***************************
  *  Process Add Classification form
  * ************************** */
-invCont.addClassification = async function (req, res, next) {
+inverterController.addClassification = async function (req, res, next) {
   const { classification_name } = req.body
   try {
     const result = await invModel.addClassification(classification_name)
@@ -86,7 +96,7 @@ invCont.addClassification = async function (req, res, next) {
 /* ***************************
  *  Show Add Vehicle form
  * ************************** */
-invCont.showAddVehicle = async function (req, res, next) {
+inverterController.showAddVehicle = async function (req, res, next) {
   try {
     let nav = await utilities.getNav()
     // const classificationList = await utilities.buildClassificationList()
@@ -109,7 +119,7 @@ invCont.showAddVehicle = async function (req, res, next) {
 /* ***************************
  *  Process Add Vehicle form
  * ************************** */
-invCont.addVehicle = async function (req, res, next) {
+inverterController.addVehicle = async function (req, res, next) {
   const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles,
       inv_color } = req.body
   try {
@@ -140,4 +150,97 @@ invCont.addVehicle = async function (req, res, next) {
   }
 }
 
-module.exports = invCont
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+inverterController.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  if (invData[0].inv_id) {
+    return res.json(invData)
+  } else {
+    next(new Error("No data returned"))
+  }
+}
+
+// Display edit form
+inverterController.editInventoryView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const inv_id = parseInt(req.params.inv_id)
+
+  const itemData = await invModel.getItemByInventoryId(inv_id)
+  if (!itemData) {
+    req.flash("error", "Vehicle not found")
+    return res.redirect("/inv/management")
+  }
+
+  res.render("inventory/edit-inventory", {
+    title: `Edit ${itemData.inv_make} ${itemData.inv_model}`,
+    nav,
+    item: itemData,
+    errors: null
+  })
+}
+
+// Handle update form submission
+inverterController.updateInventory = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const { inv_id, inv_make, inv_model, inv_year, inv_price } = req.body
+
+  const updateResult = await invModel.updateInventory(inv_id, {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_price
+  })
+
+  if (updateResult) {
+    req.flash("notice", "Vehicle updated successfully")
+    res.redirect("/inv/management")
+  } else {
+    req.flash("error", "Update failed, please try again")
+    res.status(500).render("inventory/edit-inventory", {
+      title: "Edit Vehicle",
+      nav,
+      item: req.body,
+      errors: null
+    })
+  }
+}
+
+// controllers/inverterController.js
+
+// Display delete confirmation page
+inverterController.deleteInventoryView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const inv_id = parseInt(req.params.inv_id)
+
+  const itemData = await invModel.getItemByInventoryId(inv_id)
+  if (!itemData) {
+    req.flash("error", "Vehicle not found")
+    return res.redirect("/inv/management")
+  }
+
+  res.render("inventory/delete-confirm", {
+    title: `Delete ${itemData.inv_make} ${itemData.inv_model}`,
+    nav,
+    item: itemData
+  })
+}
+
+// Handle actual delete
+inverterController.deleteInventory = async function (req, res, next) {
+  const { inv_id } = req.body
+  const deleteResult = await invModel.deleteInventory(inv_id)
+
+  if (deleteResult) {
+    req.flash("notice", "Vehicle deleted successfully")
+    res.redirect("/inv/management")
+  } else {
+    req.flash("error", "Delete failed, please try again")
+    res.redirect("/inv/management")
+  }
+}
+
+
+module.exports = inverterController
