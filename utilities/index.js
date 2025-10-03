@@ -34,36 +34,6 @@ Util.getNav = async function (req, res, next) {
   return list
 };
 
-// Util.getNav = async function () {
-//   let data = await invModel.getClassifications()
-//   let list = "<ul>"
-
-//   // Home link
-//   list += '<li><a href="/">Home</a></li>'
-
-//   // Classification links
-//   data.rows.forEach((row) => {
-//     console.log("✅ getNav called");
-//     list += `<li>
-//       <a href="/inv/type/${row.classification_id}" 
-//          title="See our inventory of ${row.classification_name} vehicles">
-//          ${row.classification_name}
-//       </a>
-//     </li>`
-//   })
-
-//   // Vehicle Management (admin functions)
-//   list += `<li><a href="/inv/management">Management</a></li>`
-
-//   // Account links
-//   list += `<li><a href="/account/login">Login</a></li>`
-//   list += `<li><a href="/account/register">Register</a></li>`
-
-//   list += "</ul>"
-//   return list
-// }
-
-
 Util.getHero = function (req, res, next) {
    const hero = {
             title: 'Welcome to CSE Motors!',
@@ -170,7 +140,7 @@ Util.buildRegisterGrid = async function () {
   grid += `<label for="password">Password</label>`
   grid += `<input type="password" id="password" class="password" name="account_password" required>`
   grid += `</div>`
-  grid += `<p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
+  grid += `<p class="requirement">Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
   grid += `<button type="submit" id="register">Register</button>`
   grid += `<button type="button" id="togglePassword">Show Password</button>`
   grid += `</form>`
@@ -181,23 +151,30 @@ Util.buildRegisterGrid = async function () {
 }
 Util.buildLoginGrid = async function () {
 
-  let grid = `<form action="/account/login/test" method="POST">`
-  grid += `<div class="form-group">`
-  grid += '<label for="username">Enter Email</label>'
-  grid += `<input type="text" id="username" name="account_email" required>`
-  grid += `</div>`
-  grid += `<div class="form-group">`
-  grid += `<label for="password">Password</label>`
-  grid += `<input type="password" id="password" name="account_password" required>`
-  grid += `<p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>`
-  grid += `<button id='togglePassword'>Show Password</button>`
-  grid += `</div>`
-  grid += `<button type="submit">Log In</button>`
-  grid += `<div class="signup-link">`
-  grid += `<p>No Account? <a href="/account/register">Sign Up Here!</a></p>`
-  grid += `</div>`
-  grid +=  `</form>`
-  grid +=  `<script src="/js/script.js" defer></script>`
+  let grid = `
+<div class="login-form-wrapper">
+  <div class="login-form-card">
+    <h2>Login</h2>
+    <form action="/account/login/test" method="POST">
+      <div class="form-group">
+        <label for="username">Enter Email</label>
+        <input type="text" id="username" name="account_email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="account_password" required>
+        </div>
+        <p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>
+        <button id="togglePassword">Show Password</button>
+      <button type="submit">Log In</button>
+      <div class="signup-link">
+        <p>No Account? <a href="/account/register">Sign Up Here!</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="/js/script.js" defer></script>`
+
   
   return grid;
 }
@@ -212,54 +189,189 @@ Util.buildAddClassificationGrid = async function () {
   return grid
 }
 
+// Util.buildNewVehicleGrid = async function () {
+//   let inventoryGrid = `
+//   <form action="/inv/add-vehicle" method="POST" class="container mt-4">
+
+//   <!-- Classification -->
+//   <div class="mb-3">
+//     <label for="classification_id" >Classification</label>
+//     <select name="classification_id" id="classification_id" class="form-select" required>
+//       <option value="">-- Choose Classification --</option>
+//       <% classifications.forEach(classification => { %>
+//         <option value="<%= classification.classification_id %>">
+//           <%= classification.classification_name %>
+//         </option>
+//       <% }) %>
+//     </select>
+//   </div>
+
+//   <!-- Make -->
+//   <div class="mb-3">
+//     <label for="inv_make" class="form-label">Make</label>
+//     <input 
+//       type="text" 
+//       name="inv_make" 
+//       id="inv_make" 
+//       class="form-control"
+//       placeholder="Enter vehicle make (min 3 chars)" 
+//       minlength="3" 
+//       required
+//     >
+//   </div>
+
+//   <!-- Model -->
+//   <div class="mb-3">
+//     <label for="inv_model" class="form-label">Model</label>
+//     <input 
+//       type="text" 
+//       name="inv_model" 
+//       id="inv_model" 
+//       class="form-control"
+//       placeholder="Enter vehicle model (min 3 chars)" 
+//       minlength="3" 
+//       required
+//     >
+//   </div>
+
+//   <!-- Description -->
+//   <div class="mb-3">
+//     <label for="inv_description" class="form-label">Description</label>
+//     <textarea 
+//       name="inv_description" 
+//       id="inv_description" 
+//       class="form-control"
+//       rows="4"
+//       placeholder="Enter vehicle description" 
+//       required
+//     ></textarea>
+//   </div>
+
+//   <!-- Image Path -->
+//   <div class="mb-3">
+//     <label for="inv_image" >Image Path</label>
+//     <input 
+//       type="text" 
+//       name="inv_image" 
+//       id="inv_image" 
+//       class="form-control"
+//       value="/images/vehicle/no-image.png"
+//       required
+//     >
+//   </div>
+
+//   <!-- Thumbnail Path -->
+//   <div class="mb-3">
+//     <label for="inv_thumbnail" >Thumbnail Path</label>
+//     <input 
+//       type="text" 
+//       name="inv_thumbnail" 
+//       id="inv_thumbnail" 
+//       class="form-control"
+//       value="/images/vehicle/no-image.png"
+//       required
+//     >
+//   </div>
+
+//   <!-- Price -->
+//   <div class="mb-3">
+//     <label for="inv_price" >Price</label>
+//     <input 
+//       type="number" 
+//       name="inv_price" 
+//       id="inv_price" 
+//       class="form-control"
+//       placeholder="Enter price (integer or decimal)" 
+//       step="0.01"
+//       required
+//     >
+//   </div>
+
+//   <!-- Year -->
+//   <div class="mb-3">
+//     <label for="inv_year" >Year</label>
+//     <input 
+//       type="number" 
+//       name="inv_year" 
+//       id="inv_year" 
+//       class="form-control"
+//       placeholder="4-digit year" 
+//       min="1900" 
+//       max="2099" 
+//       required
+//     >
+//   </div>
+
+//   <!-- Miles -->
+//   <div class="mb-3">
+//     <label for="inv_miles" >Miles</label>
+//     <input 
+//       type="number" 
+//       name="inv_miles" 
+//       id="inv_miles" 
+//       class="form-control"
+//       placeholder="Enter mileage (digits only)" 
+//       min="0" 
+//       required
+//     >
+//   </div>
+
+//   <!-- Color -->
+//   <div class="mb-3">
+//     <label for="inv_color" >Color</label>
+//     <input 
+//       type="text" 
+//       name="inv_color" 
+//       id="inv_color" 
+//       class="form-control"
+//       placeholder="Enter vehicle color" 
+//       required
+//     >
+//   </div>
+
+//   <!-- Submit -->
+//   <button type="submit" class="btn btn-primary">Add Vehicle</button>
+// </form>
+
+//   `
+//   return inventoryGrid
+// }
 Util.buildNewVehicleGrid = async function () {
   let inventoryGrid = `
-  <form action="/inv/add-vehicle" method="POST" class="container mt-4">
+  <div class="vehicle-form-wrapper">
+    <div class="vehicle-form-card">
+      <h2 class="form-title">Add New Vehicle</h2>
+      <form action="/inv/add-vehicle" method="POST">
+        
+        <!-- Classification -->
+        <div class="form-group">
+          <label for="classification_id">Classification</label>
+          <select name="classification_id" id="classification_id" required>
+            <option value="">-- Choose Classification --</option>
+            <% classifications.forEach(classification => { %>
+              <option value="<%= classification.classification_id %>">
+                <%= classification.classification_name %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
 
-  <!-- Classification -->
-  <div class="mb-3">
-    <label for="classification_id" class="form-label">Classification</label>
-    <select name="classification_id" id="classification_id" class="form-select" required>
-      <option value="">-- Choose Classification --</option>
-      <% classifications.forEach(classification => { %>
-        <option value="<%= classification.classification_id %>">
-          <%= classification.classification_name %>
-        </option>
-      <% }) %>
-    </select>
-  </div>
+        <!-- Make -->
+        <div class="form-group">
+          <label for="inv_make">Make</label>
+          <input type="text" name="inv_make" id="inv_make" placeholder="Enter vehicle make" minlength="3" required>
+        </div>
 
-  <!-- Make -->
-  <div class="mb-3">
-    <label for="inv_make" class="form-label">Make</label>
-    <input 
-      type="text" 
-      name="inv_make" 
-      id="inv_make" 
-      class="form-control"
-      placeholder="Enter vehicle make (min 3 chars)" 
-      minlength="3" 
-      required
-    >
-  </div>
+        <!-- Model -->
+        <div class="form-group">
+          <label for="inv_model">Model</label>
+          <input type="text" name="inv_model" id="inv_model" placeholder="Enter vehicle model" minlength="3" required>
+        </div>
 
-  <!-- Model -->
-  <div class="mb-3">
-    <label for="inv_model" class="form-label">Model</label>
-    <input 
-      type="text" 
-      name="inv_model" 
-      id="inv_model" 
-      class="form-control"
-      placeholder="Enter vehicle model (min 3 chars)" 
-      minlength="3" 
-      required
-    >
-  </div>
-
-  <!-- Description -->
-  <div class="mb-3">
-    <label for="inv_description" class="form-label">Description</label>
+        <!-- keep the rest of your fields here... -->
+        <!-- Description -->
+  <div class="form-group">
+    <label for="inv_description" >Description</label>
     <textarea 
       name="inv_description" 
       id="inv_description" 
@@ -271,8 +383,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Image Path -->
-  <div class="mb-3">
-    <label for="inv_image" class="form-label">Image Path</label>
+  <div class="form-group">
+    <label for="inv_image" >Image Path</label>
     <input 
       type="text" 
       name="inv_image" 
@@ -284,8 +396,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Thumbnail Path -->
-  <div class="mb-3">
-    <label for="inv_thumbnail" class="form-label">Thumbnail Path</label>
+  <div class="form-group">
+    <label for="inv_thumbnail" >Thumbnail Path</label>
     <input 
       type="text" 
       name="inv_thumbnail" 
@@ -297,8 +409,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Price -->
-  <div class="mb-3">
-    <label for="inv_price" class="form-label">Price</label>
+  <div class="form-group">
+    <label for="inv_price" >Price</label>
     <input 
       type="number" 
       name="inv_price" 
@@ -311,8 +423,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Year -->
-  <div class="mb-3">
-    <label for="inv_year" class="form-label">Year</label>
+  <div class="form-group">
+    <label for="inv_year" >Year</label>
     <input 
       type="number" 
       name="inv_year" 
@@ -326,8 +438,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Miles -->
-  <div class="mb-3">
-    <label for="inv_miles" class="form-label">Miles</label>
+  <div class="form-group">
+    <label for="inv_miles" >Miles</label>
     <input 
       type="number" 
       name="inv_miles" 
@@ -340,8 +452,8 @@ Util.buildNewVehicleGrid = async function () {
   </div>
 
   <!-- Color -->
-  <div class="mb-3">
-    <label for="inv_color" class="form-label">Color</label>
+  <div class="form-group">
+    <label for="inv_color" >Color</label>
     <input 
       type="text" 
       name="inv_color" 
@@ -352,29 +464,42 @@ Util.buildNewVehicleGrid = async function () {
     >
   </div>
 
-  <!-- Submit -->
-  <button type="submit" class="btn btn-primary">Add Vehicle</button>
-</form>
-
+        <button type="submit" class="btn-submit">Add Vehicle</button>
+      </form>
+    </div>
+  </div>
   `
   return inventoryGrid
 }
 
 Util.buildVehicleManagementGrid = async function () {
   let MgtGrid = `
-   <ul>
-      <li><a href="/inv/add-classification">Add New Classification</a></li>
-      <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
-    </ul>
+   <div class="vehicle-mgt-cards">
+      <a href="/inv/add-classification" class="mgt-card">
+        <h3>➕ Add New Classification</h3>
+        <p>Create a new classification for vehicles.</p>
+      </a>
+      <a href="/inv/add-inventory" class="mgt-card">
+        <h3>🚗 Add New Vehicle</h3>
+        <p>Register a new vehicle into inventory.</p>
+      </a>
+    </div>
   `
   return MgtGrid
 }
 
 Util.loginSuccessGrid = async () => {
   let successGrid = `
-  <p>You're logged in successfully!</p>`
+    <div class="login-success-container">
+      <div class="login-success-card">
+        <h2>✅ Success!</h2>
+        <p>You’re logged in successfully!</p>
+      </div>
+    </div>
+  `
   return successGrid
 }
+
 /* ****************************************
  *  Check Login
  * ************************************ */

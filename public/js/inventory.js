@@ -27,21 +27,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Build inventory items into HTML table components and inject into DOM 
 function buildInventoryList(data) { 
- let inventoryDisplay = document.getElementById("inventoryDisplay"); 
- // Set up the table labels 
- let dataTable = '<thead>'; 
- dataTable += '<tr><th>Vehicle Name</th><td>&nbsp;</td><td>&nbsp;</td></tr>'; 
- dataTable += '</thead>'; 
- // Set up the table body 
- dataTable += '<tbody>'; 
- // Iterate over all vehicles in the array and put each in a row 
- data.forEach(function (element) { 
-  console.log(element.inv_id + ", " + element.inv_model); 
-  dataTable += `<tr><td>${element.inv_make} ${element.inv_model}</td>`; 
-  dataTable += `<td><a href='/inv/edit/${element.inv_id}' title='Click to update'>Modify</a></td>`; 
-  dataTable += `<td><a href='/inv/delete/${element.inv_id}' title='Click to delete'>Delete</a></td></tr>`; 
- }) 
- dataTable += '</tbody>'; 
- // Display the contents in the Inventory Management view 
- inventoryDisplay.innerHTML = dataTable; 
+  let inventoryDisplay = document.getElementById("inventoryDisplay"); 
+  
+  // Set up the table with classes for styling
+  let dataTable = `
+    <thead>
+      <tr>
+        <th style="text-align:left; padding: 8px; background:#f4f4f4;">Vehicle Name</th>
+        <th style="padding: 8px; background:#f4f4f4;">Modify</th>
+        <th style="padding: 8px; background:#f4f4f4;">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+  `; 
+
+  // Iterate over all vehicles in the array and put each in a row 
+  data.forEach(function (element) { 
+    console.log(element.inv_id + ", " + element.inv_model); 
+    dataTable += `
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 8px;">${element.inv_make} ${element.inv_model}</td>
+        <td style="padding: 8px;">
+          <a href='/inv/edit/${element.inv_id}' 
+             style="color: #007bff; text-decoration:none;" 
+             title='Click to update'>Modify</a>
+        </td>
+        <td style="padding: 8px;">
+          <a href='/inv/delete/${element.inv_id}' 
+             style="color: #dc3545; text-decoration:none;" 
+             title='Click to delete'>Delete</a>
+        </td>
+      </tr>
+    `; 
+  }) 
+
+  dataTable += '</tbody>'; 
+  
+  // Display the contents in the Inventory Management view 
+  inventoryDisplay.innerHTML = `
+    <table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px;">
+      ${dataTable}
+    </table>
+  `;
 }
