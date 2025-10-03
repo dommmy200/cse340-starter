@@ -276,7 +276,396 @@ form button:hover {
 #togglePassword {
   margin-top: 15px;
 }
-/******* Footer Styles ***************/
+/******* Begin Mgt View Style ************************************************/
+/* General Page Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+/* Flash Messages */
+.flash-message {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.flash-message.error {
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+.flash-message.success {
+  background: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+.flash-message.info {
+  background: #cff4fc;
+  color: #055160;
+  border: 1px solid #b6effb;
+}
+
+/* Quick Links */
+.quick-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+  display: flex;
+  gap: 15px;
+}
+.quick-links li a {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.quick-links li a:hover {
+  background: #0056b3;
+}
+
+/* Inventory Section */
+.inventory-section {
+  margin-top: 25px;
+}
+.inventory-section h2 {
+  margin-bottom: 15px;
+}
+
+/* Classification Dropdown */
+.classification-select {
+  margin-bottom: 15px;
+}
+.classification-select label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+.classification-select select {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Inventory Table */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+.inventory-table th, 
+.inventory-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+.inventory-table th {
+  background: #f4f4f4;
+}
+.inventory-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+.inventory-table a {
+  color: #007bff;
+  text-decoration: none;
+}
+.inventory-table a:hover {
+  text-decoration: underline;
+}
+.inventory-table a[title*="delete"] {
+  color: #dc3545;
+}
+/* Vehicle Management Cards */
+.vehicle-mgt-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.vehicle-mgt-cards .mgt-card {
+  display: block;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.25s ease;
+}
+
+.vehicle-mgt-cards .mgt-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: #007bff;
+}
+
+.vehicle-mgt-cards .mgt-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.vehicle-mgt-cards .mgt-card:hover {
+  transform: translateY(-5px);
+  border-color: #007bff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+/******* Start Login Form View Style **************************************************************/
+/* Wrapper to center the login form */
+.login-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: #eef2f7;
+  padding: 40px;
+}
+
+/* Card container */
+.login-form-card {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 14px;
+  height: 100%;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+.login-form-card form {
+  /* height: 350px; */
+  display: flex;
+  flex-direction: column;
+}
+/* Form Title */
+.login-form-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Input groups */
+.login-form-card .form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Scoped Login Form Styles */
+.login-form-card .form-group {
+  margin-bottom: 20px; /* less spacing than vehicle form */
+}
+
+.login-form-card .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;  /* smaller than vehicle form */
+  color: #333;
+}
+
+.login-form-card .form-group input {
+  width: 100%;
+  padding: 10px 12px;  /* tighter padding */
+  border: 1px solid #ccc;
+  border-radius: 0 0 8px 8px;
+  font-size: 0.95rem;  /* slightly smaller input text */
+}
+
+.login-form-card .form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.login-form-card .form-group p {
+  font-size: 0.5rem;
+  color: #555;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+
+/* Toggle password button */
+#togglePassword {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#togglePassword:hover {
+  color: #0056b3;
+}
+
+/* Submit button */
+button[type="submit"] {
+  width: 100%;
+  padding: 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Signup link */
+.signup-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.signup-link a {
+  color: #007bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/******* End Login Form View Style **************************************************************/
+/******* End Mgt View Style **************************************************************/
+/******* Start BuildNewVehicle Form View Style *******************************************/
+.vehicle-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  min-height: 100vh;
+  background: #f3f6fa;
+  padding: 60px 20px; 
+}
+
+.vehicle-form-card {
+  background: #fff;
+  padding: 50px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin: 20px auto;
+}
+.requirement {
+  padding: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+  border-radius: 0 0 8px 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+.form-group input{
+  border-radius: 0 0 8px 8px;
+}
+.form-group textarea {
+  resize: vertical;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.btn-submit:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+/******* End Build New Vehicle Form View Style ********************************************/
+/******* Success View Style ************************************************************/
+.login-success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;  /* full viewport height */
+  background: #f3f6fa; /* matches form background for consistency */
+  padding: 20px;
+}
+
+.login-success-card {
+  background: #f9fffa;
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.login-success-card h2 {
+  margin-bottom: 15px;
+  color: #28a745;
+  font-size: 1.6rem;
+}
+
+.login-success-card p {
+  color: #444;
+  font-size: 1rem;
+  margin: 0;
+}
+/******* End Success View Style ********************************************/
+/******* Footer Styles *****************************************************/
 .copyright {
   display: flex;
   flex-direction: row;
