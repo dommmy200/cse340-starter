@@ -15,6 +15,7 @@ const pool = require('./database/index')
 
 const env = require("dotenv").config()
 const utilities = require('./utilities')
+const { checkJWTToken } = require('./middleware/auth')
 const static = require("./routes/static")
 const inventoryRoute = require('./routes/inventoryRoute')
 const accountRoute = require('./routes/accountRoute')
@@ -26,10 +27,11 @@ const cookieParser = require('cookie-parser')
  * Parsers
  *************************/
 // Parse URL-encoded bodies (for form data)
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }))
 // Parse JSON bodies (if you also handle JSON requests)
-app.use(express.json());
+app.use(express.json())
 app.use(cookieParser())
+app.use(checkJWTToken);
 
 
 /* ***********************
@@ -39,14 +41,6 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout")
 
-app.use((req, res, next) => {
-  res.locals = {
-    images: "/images/site/icon.png",
-    year: new Date().getFullYear(),
-    siteName: "CSE Motors",
-  };
-  next()
-})
 /* ***********************
  * View Session
  *************************/
@@ -60,6 +54,20 @@ app.use(session({
   saveUninitialized: true,
   name: 'sessionId',
 }))
+/* ***************************************************************
+ * locals allows to access loggedin, user, & others in any EJS partial.
+ *****************************************************************/
+app.use((req, res, next) => {
+  const account = res.locals.account || req.session.user || null;
+  res.locals = {
+    images: "/images/site/icon.png",
+    year: new Date().getFullYear(),
+    siteName: "CSE Motors",
+  };
+  res.locals.loggedin = !!account
+  res.locals.user = account
+  next()
+})
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){

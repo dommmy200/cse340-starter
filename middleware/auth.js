@@ -20,4 +20,24 @@ function checkAuth(req, res, next) {
   }
 }
 
-module.exports = { checkAuth }
+/* Middleware to check JWT and set account info */
+function checkJWTToken(req, res, next) {
+  const token = req.cookies.jwt;
+  if (!token) {
+    res.locals.account = null;
+    return next();
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+    if (err) {
+      console.error("JWT verification error:", err);
+      res.locals.account = null;
+      return next();
+    }
+
+    res.locals.account = accountData;
+    next();
+  });
+};
+
+module.exports = { checkAuth, checkJWTToken  }

@@ -74,14 +74,8 @@ accountController.registerAccount = async function (req, res, next) {
  * ************************************ */
 accountController.accountLogin = async function (req, res) {
   let nav = await utilities.getNav()
-  // const { account_email, account_password } = req.body
-  // const accountData = await accountModel.getAccountByEmail(account_email)
   const { account_email, account_password } = req.body
-  console.log("accountData from DB:", account_email)
-  console.log("accountData from DB:", account_password)
-  // const hashedPassword = await bcrypt.hash(account_password, 10) // 10 salt rounds
   const accountData = await accountModel.getAccountByEmail(account_email)
-  console.log("accountData from DB:", accountData)
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.")
     const loginGrid = await utilities.buildLoginGrid();
@@ -94,18 +88,28 @@ accountController.accountLogin = async function (req, res) {
     })
     return
   }
-  console.log('Outside Try-Catch')
   try {
-    console.log('Inside Try-Catch')
     if (await bcrypt.compare(account_password, accountData.account_password)) {
-      console.log('Inside Try-Catch, If-statement')
       delete accountData.account_password
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
-      if(process.env.NODE_ENV === 'development') {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      // 👇 Explicitly include only necessary data in JWT
+      const payload = {
+        account_id: accountData.account_id,
+        account_firstname: accountData.account_firstname,
+        account_lastname: accountData.account_lastname,
+        account_email: accountData.account_email,
+        account_type: accountData.account_type
       }
+      // Create JWT token
+      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1h"
+      })
+      // Set secure cookie
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        maxAge: 3600 * 1000
+      })
+      req.flash("notice", `Welcome back, ${accountData.account_firstname}!`)
       return res.redirect("/account/management")
     }
     else {
@@ -120,21 +124,139 @@ accountController.accountLogin = async function (req, res) {
       })
     }
   } catch (error) {
-    throw new Error('Access Forbidden')
+    console.error("Login error:", error)
+    req.flash("notice", "An error occurred while logging in.")
+    const loginGrid = await utilities.buildLoginGrid();
+    return res.status(500).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+      loginGrid
+    })
+  }
+}
+/* ****************************************
+ *  Logout procedures
+ * ************************************ */
+accountController.accountLogout = async function (req, res) {
+  res.clearCookie("jwt");
+  req.flash("notice", "You have been logged out successfully.");
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+};
+accountController.buildSuccess = async function (req, res) {
+  let nav = await utilities.getNav();
+  try {
+    // Verify and decode JWT
+    const token = req.cookies.jwt;
+    if (!token) {
+      req.flash("notice", "You must be logged in to access your account.");
+      return res.redirect("/account/login");
+    }
+
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    res.render("account/management", {
+      title: "Account Management",
+      nav,
+      account_firstname: decoded.account_firstname,
+      account_type: decoded.account_type,
+      account_id: decoded.account_id,
+      notice: req.flash("notice")
+    });
+  } catch (err) {
+    console.error("Error decoding JWT:", err);
+    req.flash("notice", "Session expired. Please log in again.");
+    res.redirect("/account/login");
+  }
+}
+accountController.buildUpdateAccount = async function (req, res) {
+  const account_id = req.params.account_id;
+  let nav = await utilities.getNav();
+  
+  const accountData = await accountModel.getAccountById(account_id);
+  if (!accountData) {
+    req.flash("notice", "Account not found.");
+    return res.redirect("/account/login");
+  }
+
+  res.render("account/update", {
+    title: "Update Account Information",
+    nav,
+    account: accountData,
+    notice: req.flash("notice")
+  });
+};
+/* ****************************************
+ *  Handle Account Update
+ * *************************************** */
+accountController.handleAccountUpdate = async function (req, res, next) {
+  try {
+    let nav = await utilities.getNav()
+    const account_id = parseInt(req.params.account_id)
+
+    const { account_firstname, account_lastname, account_email } = req.body
+
+    // Optional: add server-side validation
+    if (!account_firstname || !account_lastname || !account_email) {
+      req.flash("notice", "All fields are required.")
+      return res.status(400).render("account/update", {
+        title: "Update Account",
+        nav,
+        account: { account_id, account_firstname, account_lastname, account_email },
+        errors: null
+      })
+    }
+
+    // Update the account in the DB
+    const updateResult = await accountModel.updateAccount(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    )
+
+    if (updateResult) {
+      // Fetch the updated account data
+      const updatedAccount = await accountModel.getAccountById(account_id)
+
+      // Remove password before generating JWT
+      delete updatedAccount.account_password
+
+      // Regenerate JWT with updated info
+      const jwt = require("jsonwebtoken")
+      const accessToken = jwt.sign(
+        updatedAccount,
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 * 1000 }
+      )
+
+      // Reset cookie with updated data
+      res.clearCookie("jwt")
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        maxAge: 3600 * 1000,
+        secure: process.env.NODE_ENV !== "development"
+      })
+
+      req.flash("notice", "Account information updated successfully.")
+      return res.redirect("/account/management")
+    } else {
+      req.flash("notice", "Update failed. Please try again.")
+      return res.status(500).render("account/update", {
+        title: "Update Account",
+        nav,
+        account: { account_id, account_firstname, account_lastname, account_email },
+        errors: null
+      })
+    }
+  } catch (error) {
+    console.error("Account update error:", error)
+    next(error)
   }
 }
 
-accountController.buildSuccess = async function (req, res) {
-  let nav = await utilities.getNav();
-    const successGrid = await utilities.loginSuccessGrid();
-
-    // const loginGrid = await utilities.buildLoginGrid();
-    res.render("account/management", {
-      title: 'Success',
-      nav,
-      successGrid,
-      message: req.flash("notice", "Login successful")
-    })
-}
 
 module.exports = accountController

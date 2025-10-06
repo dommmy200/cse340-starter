@@ -178,6 +178,7 @@ Util.buildLoginGrid = async function () {
   
   return grid;
 }
+
 Util.buildAddClassificationGrid = async function () {
   let grid = `
     <form action="/inv/add-classification" method="POST">
@@ -189,153 +190,6 @@ Util.buildAddClassificationGrid = async function () {
   return grid
 }
 
-// Util.buildNewVehicleGrid = async function () {
-//   let inventoryGrid = `
-//   <form action="/inv/add-vehicle" method="POST" class="container mt-4">
-
-//   <!-- Classification -->
-//   <div class="mb-3">
-//     <label for="classification_id" >Classification</label>
-//     <select name="classification_id" id="classification_id" class="form-select" required>
-//       <option value="">-- Choose Classification --</option>
-//       <% classifications.forEach(classification => { %>
-//         <option value="<%= classification.classification_id %>">
-//           <%= classification.classification_name %>
-//         </option>
-//       <% }) %>
-//     </select>
-//   </div>
-
-//   <!-- Make -->
-//   <div class="mb-3">
-//     <label for="inv_make" class="form-label">Make</label>
-//     <input 
-//       type="text" 
-//       name="inv_make" 
-//       id="inv_make" 
-//       class="form-control"
-//       placeholder="Enter vehicle make (min 3 chars)" 
-//       minlength="3" 
-//       required
-//     >
-//   </div>
-
-//   <!-- Model -->
-//   <div class="mb-3">
-//     <label for="inv_model" class="form-label">Model</label>
-//     <input 
-//       type="text" 
-//       name="inv_model" 
-//       id="inv_model" 
-//       class="form-control"
-//       placeholder="Enter vehicle model (min 3 chars)" 
-//       minlength="3" 
-//       required
-//     >
-//   </div>
-
-//   <!-- Description -->
-//   <div class="mb-3">
-//     <label for="inv_description" class="form-label">Description</label>
-//     <textarea 
-//       name="inv_description" 
-//       id="inv_description" 
-//       class="form-control"
-//       rows="4"
-//       placeholder="Enter vehicle description" 
-//       required
-//     ></textarea>
-//   </div>
-
-//   <!-- Image Path -->
-//   <div class="mb-3">
-//     <label for="inv_image" >Image Path</label>
-//     <input 
-//       type="text" 
-//       name="inv_image" 
-//       id="inv_image" 
-//       class="form-control"
-//       value="/images/vehicle/no-image.png"
-//       required
-//     >
-//   </div>
-
-//   <!-- Thumbnail Path -->
-//   <div class="mb-3">
-//     <label for="inv_thumbnail" >Thumbnail Path</label>
-//     <input 
-//       type="text" 
-//       name="inv_thumbnail" 
-//       id="inv_thumbnail" 
-//       class="form-control"
-//       value="/images/vehicle/no-image.png"
-//       required
-//     >
-//   </div>
-
-//   <!-- Price -->
-//   <div class="mb-3">
-//     <label for="inv_price" >Price</label>
-//     <input 
-//       type="number" 
-//       name="inv_price" 
-//       id="inv_price" 
-//       class="form-control"
-//       placeholder="Enter price (integer or decimal)" 
-//       step="0.01"
-//       required
-//     >
-//   </div>
-
-//   <!-- Year -->
-//   <div class="mb-3">
-//     <label for="inv_year" >Year</label>
-//     <input 
-//       type="number" 
-//       name="inv_year" 
-//       id="inv_year" 
-//       class="form-control"
-//       placeholder="4-digit year" 
-//       min="1900" 
-//       max="2099" 
-//       required
-//     >
-//   </div>
-
-//   <!-- Miles -->
-//   <div class="mb-3">
-//     <label for="inv_miles" >Miles</label>
-//     <input 
-//       type="number" 
-//       name="inv_miles" 
-//       id="inv_miles" 
-//       class="form-control"
-//       placeholder="Enter mileage (digits only)" 
-//       min="0" 
-//       required
-//     >
-//   </div>
-
-//   <!-- Color -->
-//   <div class="mb-3">
-//     <label for="inv_color" >Color</label>
-//     <input 
-//       type="text" 
-//       name="inv_color" 
-//       id="inv_color" 
-//       class="form-control"
-//       placeholder="Enter vehicle color" 
-//       required
-//     >
-//   </div>
-
-//   <!-- Submit -->
-//   <button type="submit" class="btn btn-primary">Add Vehicle</button>
-// </form>
-
-//   `
-//   return inventoryGrid
-// }
 Util.buildNewVehicleGrid = async function () {
   let inventoryGrid = `
   <div class="vehicle-form-wrapper">
@@ -498,6 +352,16 @@ Util.loginSuccessGrid = async () => {
     </div>
   `
   return successGrid
+}
+Util.logoutGrid = async () => {
+  let logoutGridGrid = `
+      <div class="logout">
+        <a href="/" class="mgt-card">
+         <h3>Logout</h3>
+        </a>
+      </div>
+  `
+  return logoutGridGrid
 }
 
 /* ****************************************

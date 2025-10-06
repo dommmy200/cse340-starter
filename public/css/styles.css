@@ -632,6 +632,16 @@ button[type="submit"]:hover {
   transform: translateY(-2px);
 }
 /******* End Build New Vehicle Form View Style ********************************************/
+.div-update {
+  height: 40vh;
+}
+.div-update a {
+  background: #000000;
+  color: white;
+  border-radius: 10px;
+  height: 60px;
+  padding: 10px;
+}
 /******* Success View Style ************************************************************/
 .login-success-container {
   display: flex;
