@@ -167,15 +167,14 @@ Util.buildLoginGrid = async function () {
         <input type="password" id="password" name="account_password" required>
         </div>
         <p>Password must be minimum of 12 characters and include 1 capital letter, 1 number, and 1 special character.</p>
-        <button id="togglePassword">Show Password</button>
+        <button id="togglePassword" type="button">Show Password</button>
       <button type="submit">Log In</button>
       <div class="signup-link">
         <p>No Account? <a href="/account/register">Sign Up Here!</a></p>
       </div>
     </form>
   </div>
-</div>
-<script src="/js/script.js" defer></script>`
+</div>`
 
   
   return grid;

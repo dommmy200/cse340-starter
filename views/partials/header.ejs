@@ -4,13 +4,13 @@
   </span>
 
   <div id="tools" class="tools">
-    <% if (loggedin) { %>
-      <a href="/account/management" title="Manage your account">
-        Welcome <%= user.account_firstname || 'Basic' %>
+    <% if (locals.account_firstname) { %>
+      <a href="/account/management" title="Go to Account Management">
+        Welcome <%= account_firstname %>
       </a>
-      <a href="/account/logout" title="Click to log out">Logout</a>
+      <a href="/account/logout" title="Log out">Logout</a>
     <% } else { %>
-      <a href="/account/login" title="Click to log in">My Account</a>
+      <a href="/account/login" title="Log in">My Account</a>
     <% } %>
   </div>
 </header>

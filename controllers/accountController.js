@@ -138,15 +138,33 @@ accountController.accountLogin = async function (req, res) {
   }
 }
 /* ****************************************
- *  Logout procedures
+ *  Logout Process
  * ************************************ */
 accountController.accountLogout = async function (req, res) {
-  res.clearCookie("jwt");
-  req.flash("notice", "You have been logged out successfully.");
-  req.session.destroy(() => {
-    res.redirect('/');
-  });
+  try {
+    // Clear the JWT cookie
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+    });
+
+    req.flash("notice", "You have been logged out successfully.");
+    // Destroy session if any (connect-flash may rely on it)
+    if (req.session) {
+      req.session.destroy(() => {
+        return res.redirect("/");
+      });
+    } else {
+      req.flash("notice", "You have been logged out successfully.");
+      return res.redirect("/");
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    req.flash("notice", "An error occurred while logging out.");
+    res.redirect("/");
+  }
 };
+
 
 /* ****************************************
  *  Successful Login
