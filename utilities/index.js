@@ -6,6 +6,8 @@ const app = express();
 app.use('/upgrades', express.static(path.join(process.cwd(), 'public')));
 app.use('/hero', express.static(path.join(process.cwd(), 'public')));
 
+const { body } = require("express-validator")
+const accountModel = require("../models/account-model")
 const invModel = require("../models/inventory-model")
 const Util = {}
 
@@ -326,61 +328,104 @@ Util.buildNewVehicleGrid = async function () {
   return inventoryGrid
 }
 
+
+
 Util.buildVehicleManagementGrid = async function () {
   let MgtGrid = `
-   <div class="vehicle-mgt-cards">
-      <a href="/inv/add-classification" class="mgt-card">
-        <h3>➕ Add New Classification</h3>
-        <p>Create a new classification for vehicles.</p>
-      </a>
-      <a href="/inv/add-inventory" class="mgt-card">
-        <h3>🚗 Add New Vehicle</h3>
-        <p>Register a new vehicle into inventory.</p>
-      </a>
-    </div>
+  <div class="vehicle-mgt-cards">
+  <a href="/inv/add-classification" class="mgt-card">
+  <h3>➕ Add New Classification</h3>
+  <p>Create a new classification for vehicles.</p>
+  </a>
+  <a href="/inv/add-inventory" class="mgt-card">
+  <h3>Add New Vehicle</h3>
+  <p>Register a new vehicle into inventory.</p>
+  </a>
+  </div>
   `
   return MgtGrid
 }
 
 Util.loginSuccessGrid = async () => {
   let successGrid = `
-    <div class="login-success-container">
-      <div class="login-success-card">
-        <h2>✅ Success!</h2>
-        <p>You’re logged in successfully!</p>
-      </div>
-    </div>
+  <div class="login-success-container">
+  <div class="login-success-card">
+  <h2> Success!</h2>
+  <p>You're logged in successfully!</p>
+  </div>
+  </div>
   `
   return successGrid
 }
 Util.logoutGrid = async () => {
   let logoutGridGrid = `
-      <div class="logout">
-        <a href="/" class="mgt-card">
-         <h3>Logout</h3>
-        </a>
-      </div>
+  <div class="logout">
+  <a href="/" class="mgt-card">
+  <h3>Logout</h3>
+  </a>
+  </div>
   `
   return logoutGridGrid
 }
 
 /* ****************************************
- *  Check Login
- * ************************************ */
- Util.checkLogin = (req, res, next) => {
+*  Check Login
+* ************************************ */
+Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
   } else {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
- }
+}
 
 /* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
- **************************************** */
+* Middleware For Handling Errors
+* Wrap other function in this for 
+* General Error Handling
+**************************************** */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
+// Validation for updating account info
+Util.updateAccountRules = [
+  body("account_firstname")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("First name must be at least 2 characters long."),
+  body("account_lastname")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("Last name must be at least 2 characters long."),
+  body("account_email")
+    .trim()
+    .isEmail()
+    .withMessage("Please enter a valid email address.")
+    .custom(async (value, { req }) => {
+      const account = await accountModel.getAccountByEmail(value)
+      if (account && account.account_id != req.body.account_id) {
+        throw new Error("This email is already in use by another account.")
+      }
+    }),
+]
+// Validation for changing password
+Util.passwordChangeRules = [
+  body("new_password")
+    .trim()
+    .isLength({ min: 12 })
+    .withMessage("Password must be at least 12 characters long.")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter.")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number.")
+    .matches(/[!@#$%^&*(),.?":{}|<>]/)
+    .withMessage("Password must contain at least one special character."),
+  body("confirm_password")
+    .custom((value, { req }) => {
+      if (value !== req.body.new_password) {
+        throw new Error("Passwords do not match.")
+      }
+      return true
+    }),
+]
 module.exports = Util

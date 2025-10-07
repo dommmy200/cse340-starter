@@ -1,5 +1,6 @@
 const accountModel = require("../models/account-model")
 const utilities = require("../utilities/")
+const { validationResult } = require("express-validator")
 const jwt = require('jsonwebtoken')
 const bcrypt = require("bcrypt") 
 
@@ -146,6 +147,10 @@ accountController.accountLogout = async function (req, res) {
     res.redirect('/');
   });
 };
+
+/* ****************************************
+ *  Successful Login
+ * *************************************** */
 accountController.buildSuccess = async function (req, res) {
   let nav = await utilities.getNav();
   try {
@@ -172,6 +177,10 @@ accountController.buildSuccess = async function (req, res) {
     res.redirect("/account/login");
   }
 }
+
+/* ****************************************
+ *  Render Update Account View
+ * *************************************** */
 accountController.buildUpdateAccount = async function (req, res) {
   const account_id = req.params.account_id;
   let nav = await utilities.getNav();
@@ -194,22 +203,28 @@ accountController.buildUpdateAccount = async function (req, res) {
  * *************************************** */
 accountController.handleAccountUpdate = async function (req, res, next) {
   try {
+    const errors = validationResult(req)
     let nav = await utilities.getNav()
     const account_id = parseInt(req.params.account_id)
 
-    const { account_firstname, account_lastname, account_email } = req.body
-
-    // Optional: add server-side validation
-    if (!account_firstname || !account_lastname || !account_email) {
-      req.flash("notice", "All fields are required.")
-      return res.status(400).render("account/update", {
+    
+    if (!errors.isEmpty()) {
+      const account = {
+        account_id,
+        account_firstname: req.body.account_firstname,
+        account_lastname: req.body.account_lastname,
+        account_email: req.body.account_email,
+      }
+      
+      return res.render("account/update", {
         title: "Update Account",
         nav,
-        account: { account_id, account_firstname, account_lastname, account_email },
-        errors: null
+        errors: errors.array(),
+        account,
       })
     }
-
+    
+    const { account_firstname, account_lastname, account_email } = req.body
     // Update the account in the DB
     const updateResult = await accountModel.updateAccount(
       account_id,
@@ -258,5 +273,35 @@ accountController.handleAccountUpdate = async function (req, res, next) {
   }
 }
 
+/* ****************************************
+ *  Process Password Change
+ * *************************************** */
+accountController.handlePasswordChange = async function (req, res) {
+  const errors = validationResult(req)
+  const nav = await utilities.getNav()
+  const account_id = parseInt(req.params.account_id)
+  
+  if (!errors.isEmpty()) {
+    const account = await accountModel.getAccountById(account_id)
+    return res.render("account/update", {
+      title: "Update Account",
+      nav,
+      errors: errors.array(),
+      account,
+    })
+  }
+  const { new_password } = req.body
+  // Password encryption goes here b4 storage
+  const hashedPassword = await bcrypt.hash(new_password, 10)
+  const result = await accountModel.updatePassword(account_id, hashedPassword)
+
+  if (result) {
+    req.flash("notice", "Password changed successfully.")
+    return res.redirect("/account/management")
+  } else {
+    req.flash("notice", "Password update failed.")
+    return res.redirect(`/account/update/${account_id}`)
+  }
+}
 
 module.exports = accountController

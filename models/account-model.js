@@ -68,5 +68,13 @@ async function updateAccount(account_id, firstname, lastname, email) {
     throw error
   }
 }
-
-module.exports = { getLoginId, registerAccount, getAccountByEmail, getAccountById, updateAccount }
+async function updatePassword(account_id, hashedPassword) {
+  const result = await pool.query(
+    `UPDATE public.account
+     SET account_password = $1
+     WHERE account_id = $2`,
+    [hashedPassword, account_id]
+  )
+  return result.rowCount
+}
+module.exports = { getLoginId, registerAccount, getAccountByEmail, getAccountById, updateAccount, updatePassword }

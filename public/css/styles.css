@@ -632,9 +632,9 @@ button[type="submit"]:hover {
   transform: translateY(-2px);
 }
 /******* End Build New Vehicle Form View Style ********************************************/
-.div-update {
+/* .div-update {
   height: 40vh;
-}
+} */
 .div-update a {
   background: #000000;
   color: white;
@@ -674,7 +674,25 @@ button[type="submit"]:hover {
   font-size: 1rem;
   margin: 0;
 }
-/******* End Success View Style ********************************************/
+/******* Error Message Style ********************************************/
+.error-messages {
+  color: #d33;
+  background: #fee;
+  border: 1px solid #d99;
+  padding: 0.5em;
+  list-style-type: none;
+}
+.error {
+  color: #c0392b;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
+.input-error {
+  border-color: #e74c3c;
+  background-color: #fee;
+}
 /******* Footer Styles *****************************************************/
 .copyright {
   display: flex;
