@@ -322,4 +322,64 @@ accountController.handlePasswordChange = async function (req, res) {
   }
 }
 
+/* ******************************************************
+*  Additional Enhancements:  Render Delete confirmation view
+*********************************************************/
+accountController.buildDeleteAccount = async (req, res, next) => {
+  const nav = await utilities.getNav();
+  res.render("account/delete-account", {
+    title: "Delete Account",
+    nav,
+    message: null,
+  });
+};
+
+/* ******************************************************
+*  Additional Enhancements:  Handle delete request
+*********************************************************/
+accountController.deleteAccount = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwt
+    if (!token) throw new Error("No token found")
+
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    console.log(' Decoded: ', decoded)
+    const accountId = decoded.account_id
+    const { password } = req.body
+
+    // Get user info
+    const user = await accountModel.getAccountById(accountId)
+    if (!user) {
+      throw new Error("Account not found.")
+    }
+
+    // Compare passwords
+    const passwordMatch = await bcrypt.compare(password, user.account_password)
+    if (!passwordMatch) {
+      const nav = await utilities.getNav()
+      return res.status(400).render("account/delete-account", {
+        title: "Delete Account",
+        nav,
+        message: "❌ Incorrect password. Please try again.",
+      })
+    }
+
+    // Delete account
+    const result = await accountModel.deleteAccount(accountId)
+    if (result) {
+      res.clearCookie("jwt") // remove token cookie
+      return res.redirect("/?message=Account+deleted+successfully")
+    } else {
+      throw new Error("Unable to delete account. Please try again later.")
+    }
+  } catch (error) {
+    console.error("Error deleting account:", error)
+    const nav = await utilities.getNav()
+    res.status(500).render("account/delete-account", {
+      title: "Delete Account",
+      nav,
+      message: "⚠️ Something went wrong. Please try again.",
+    })
+  }
+}
 module.exports = accountController

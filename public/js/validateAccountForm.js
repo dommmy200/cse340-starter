@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountForm = document.querySelector("#update-account-form");
   const passwordForm = document.querySelector("#update-password-form");
 
-  // 🔹 Utility function to show errors
+  // Utility function to show errors
   const showError = (element, message) => {
     const errorContainer = element.parentElement.querySelector(".error");
     if (errorContainer) {
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     element.classList.add("input-error");
   };
 
-  // 🔹 Clear previous errors
+  // Clear previous errors
   const clearErrors = (form) => {
     form.querySelectorAll(".error").forEach(e => e.remove());
     form.querySelectorAll(".input-error").forEach(i => i.classList.remove("input-error"));
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ✅ Validate password form
+  // Validate password form
   if (passwordForm) {
     passwordForm.addEventListener("submit", (e) => {
       clearErrors(passwordForm);

@@ -15,6 +15,19 @@ toggleButton.addEventListener('click', function() {
   }
 });
 
+/* ******************************************************
+*  Additional Enhancements:  Deletion Warning
+*********************************************************/
+const deleteLink = document.querySelector('.delete-link');
+if (deleteLink) {
+  deleteLink.addEventListener('click', (e) => {
+    if (!confirm("Are you sure you want to permanently delete your account?")) {
+      e.preventDefault();
+    }
+  });
+}
+
+
 // document.addEventListener("DOMContentLoaded", () => {
 //   // Define all possible password field IDs used in any view
 //   const appliedIds = ['password', 'new_password', 'confirm_password'];
@@ -44,4 +57,3 @@ toggleButton.addEventListener('click', function() {
 //     }
 //   });
 // });
-

@@ -19,6 +19,7 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+
 .delorean-container {
   position: relative;
   width: 80%;
@@ -124,7 +125,7 @@ body {
   border: #00aeff 7px solid;
 }
 /******* Header Styles ***************/
-header {
+/* header {
   display: flex;
   justify-content: space-between;
   color: #fff;
@@ -141,6 +142,73 @@ header {
   color: #000;
   text-decoration: none;
   font-size: 16px;
+} */
+/*==========================
+  1. Header Container Styles 
+========================== */
+#top-header {
+  /* Flexible Layout for Alignment */
+  display: flex;
+  justify-content: space-between; /* Puts site name on one end, tools on the other */
+  align-items: center; /* Vertically aligns items in the center */
+  
+  /* Appearance */
+  background-color: #333; /* Dark background */
+  color: white; /* Light text for contrast */
+  padding: 15px 20px; /* Vertical and horizontal padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/*==========================
+  2. Site Name Styles 
+========================== */
+.site-name a {
+  /* Style the Link/Text */
+  color: #fff; /* White text */
+  text-decoration: none; /* Remove underline */
+  font-size: 1.8em; /* Large, prominent size */
+  font-weight: 700; /* Bold */
+  text-transform: uppercase; /* Makes the name stand out */
+  letter-spacing: 1px;
+  
+  /* Color Transition */
+  transition: color 0.3s ease;
+}
+
+.site-name a:hover {
+  color: #007bff; /* A nice blue highlight on hover */
+}
+
+/*==========================
+  3. Account Tools Styles 
+========================== */
+.tools {
+  display: flex; /* Aligns account links horizontally */
+  gap: 15px; /* Space between the links */
+  font-size: 1em;
+}
+
+.tools a {
+  /* Link Style */
+  color: #fff; /* Slightly muted white/gray for the tools */
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  
+  /* Color Transition */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tools a:hover {
+  color: #fff; /* White text on hover */
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle light background highlight */
+}
+
+/* Special style for the "Welcome" link to stand out a bit less than an action button */
+.tools a[title="Go to Account Management"] {
+  font-weight: 500;
+  color: #fff; /* Keep the welcome message bright white */
+  padding: 5px 0; /* Remove horizontal padding since it's informational */
 }
 /******* Navigation Styles ***************/
 nav {
@@ -632,9 +700,9 @@ button[type="submit"]:hover {
   transform: translateY(-2px);
 }
 /******* End Build New Vehicle Form View Style ********************************************/
-/* .div-update {
-  height: 40vh;
-} */
+.div-update {
+  margin-bottom: 20px;
+}
 .div-update a {
   background: #000000;
   color: white;
@@ -694,7 +762,7 @@ button[type="submit"]:hover {
   background-color: #fee;
 }
 /******* Footer Styles *****************************************************/
-.copyright {
+/* .copyright {
   display: flex;
   flex-direction: row;
   background-color: rgba(0, 0, 0, 0.1);
@@ -705,6 +773,55 @@ button[type="submit"]:hover {
 }
 .copyright img {
   border: #000 solid 1px;
+} */
+ /* --- Footer Container Styles --- */
+footer {
+    /* Position and Layout */
+    width: 100%;
+    margin-top: auto; /* Pushes the footer to the bottom if the content is short */
+    
+    /* Appearance */
+    background-color: #333; /* Dark background (consistent with the header) */
+    color: #fff; /* Light gray text */
+    padding: 20px 0;
+    text-align: center; /* Center all content */
+    font-size: 0.9em;
+}
+
+/* --- Copyright Wrapper Styles --- */
+.copyright {
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Vertically align the image and text */
+    gap: 15px; /* Space between the image and the text block */
+}
+
+/* --- Image Styles --- */
+.copyright img {
+    /* Adjust size for a small footer icon/logo */
+    width: 25px;
+    height: 25px;
+    object-fit: contain; /* Ensures the image scales properly without cropping */
+}
+
+/* --- Text Container Styles --- */
+.copyright div {
+    /* Ensures the text spans are inline */
+    display: inline-block;
+}
+
+/* --- Text Span Styles --- */
+.copyright span {
+    /* Slight separation for the year and site name */
+    padding: 0 5px;
+    white-space: nowrap; /* Prevents the spans from wrapping onto a new line */
+}
+
+/* Style for the separator if you want a vertical line */
+.copyright span:first-child {
+    /* This targets the year span (the first child inside the div) */
+    border-right: 1px solid #666; /* Adds a subtle separator line */
+    padding-right: 10px;
 }
 /******* flash Styles ***************/
 /* Flash Messages */
@@ -741,6 +858,155 @@ button[type="submit"]:hover {
   background-color: #fff3cd;
   color: #856404;
   border: 1px solid #ffeeba;
+}
+
+/* ******************************************************
+*  Additional Enhancements:  Warning Paragraph Styles
+*********************************************************/
+.warning {
+    /* Color and Background */
+    color: #8a6d3b; /* Dark yellow/brown text */
+    background-color: #fcf8e3; /* Light yellow background */
+    border: 1px solid #faebcc; /* Slightly darker border */
+    
+    /* Spacing and Alignment */
+    padding: 15px;
+    margin-bottom: 20px; /* Space below the warning */
+    border-radius: 4px; /* Slightly rounded corners */
+    
+    /* Font */
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+}
+/* ******************************************************
+*  Additional Enhancements:  Cancel Button Link Styles
+*********************************************************/
+.cancel-btn {
+    /* Display and Appearance */
+    display: inline-block; /* Allows padding and width/height to be set */
+    text-decoration: none; /* Removes the underline from the link */
+    
+    /* Color */
+    color: #333; /* Dark text color */
+    background-color: #f0f0f0; /* Light gray background */
+    border: 1px solid #ccc; /* Subtle border */
+    
+    /* Spacing */
+    padding: 10px 20px;
+    margin-left: 10px; /* Space it away from the delete button (if present) */
+    
+    /* Shape and Font */
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer; /* Indicates it's clickable */
+    
+    /* Transition for a smooth hover effect */
+    transition: background-color 0.2s, border-color 0.2s;
+}
+/* ***********************************************************
+*  Additional Enhancements: Hover effect for the cancel button
+**************************************************************/
+.cancel-btn:hover {
+    background-color: #e0e0e0; /* Darken the background slightly on hover */
+    border-color: #bbb;
+}
+/* **************************************************************
+*  Additional Enhancements: Danger Zone Section Container Styles
+*****************************************************************/
+.danger-zone {
+    /* Layout and Spacing */
+    padding: 20px;
+    margin-top: 30px; /* Separates it clearly from other content */
+    width: 30%;
+    margin: 15px auto;
+    
+    /* Visual Alerting */
+    border: 2px solid #dc3545; /* Red border to signify danger */
+    background-color: #f8d7da; /* Light red/pink background */
+    border-radius: 8px;
+    text-align: center; /* Centers the content within the zone */
+}
+
+.danger-zone h2 {
+    /* Heading Style */
+    color: #dc3545; /* Matching red text for the title */
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    text-transform: uppercase;
+}
+
+/* **************************************************
+*  Additional Enhancements: Delete Link Button Styles
+*****************************************************/
+.delete-link {
+    /* Display as a Block-like Button */
+    display: inline-block;
+    
+    /* Destructive Color Scheme */
+    background-color: #dc3545; /* Bright Red background */
+    color: white; /* White text for contrast */
+    
+    /* Spacing and Shape */
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none; /* Remove underline */
+    
+    /* Font */
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    
+    /* Smooth Transition for Hover */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* **************************************************************
+*  Additional Enhancements: Delete Link Button Hover effectStyles
+*****************************************************************/
+.delete-link:hover {
+    background-color: #c82333; /* Slightly darker red on hover */
+    /* Optional: Scale effect for a more dramatic button press feel */
+    transform: scale(1.02); 
+}
+.management-section {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 99%;
+  margin: 15px auto;
+}
+.management-section p {
+  /* Display as a Block-like Button */
+  display: inline-block;
+  width: 30%;
+  margin: 0 auto;
+  
+  /* Destructive Color Scheme */
+  background-color: #f4babf; /* Bright Red background */
+  
+  /* Spacing and Shape */
+  padding: 12px 25px;
+  border-radius: 5px;
+  
+  /* Font */
+  font-size: 1.1em;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  
+  /* Smooth Transition for Hover */
+  transition: background-color 0.2s, transform 0.1s;
+}
+.management-section p a {
+  text-decoration: none; /* Remove underline */
+  color: rgb(0, 0, 0); /* White text for contrast */
+}
+.management-section p:hover {
+    /* Optional: Scale effect for a more dramatic button press feel */
+    transform: scale(1.02); 
 }
 /******* Small Screen Styles ***************/
 @media (max-width: 768px) {

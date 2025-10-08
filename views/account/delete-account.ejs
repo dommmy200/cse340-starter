@@ -1,0 +1,17 @@
+<%- include('../partials/head') %>
+<main>
+  <h1>Delete Account</h1>
+  <p class="warning">⚠️ This action cannot be undone!</p>
+
+  <% if (locals.message) { %>
+    <div class="notice"><%= message %></div>
+  <% } %>
+
+  <form id="deleteAccountForm" action="/account/delete" method="POST">
+    <label for="password">Confirm your password</label>
+    <input type="password" id="password" name="password" autocomplete="off" required>
+    <button id="togglePassword" type="button">Show Password</button>
+    <button type="submit" class="delete-btn">Delete My Account</button>
+    <a href="/account/login" class="cancel-btn">Cancel</a>
+  </form>
+</main>

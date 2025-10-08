@@ -9,6 +9,7 @@ const accountController = require("../controllers/accountController")
 const utilities = require("../utilities")
 const { passwordChangeRules, updateAccountRules } = require("../utilities")
 const { checkAuth } = require('../middleware/auth')
+const { deleteAccountRules, checkDeleteAccountData } = require('../validators/accountValidation')
 
 // // Validation for updating account info
 // const updateAccountRules = [
@@ -69,6 +70,23 @@ router.get("/update/:account_id", utilities.checkLogin, utilities.handleErrors(a
 router.post("/update/:account_id", updateAccountRules, utilities.handleErrors(accountController.handleAccountUpdate))
 // Handle password change
 router.post("/update-password/:account_id", passwordChangeRules, utilities.checkLogin, utilities.handleErrors(accountController.handlePasswordChange))
+
+/* ******************************************************
+*  Additional Enhancements:  Delete account routes
+*********************************************************/
+router.get(
+  "/delete",
+  utilities.checkLogin, 
+  accountController.buildDeleteAccount
+);
+
+router.post(
+  "/delete",
+  utilities.checkLogin,
+//   deleteAccountRules,
+//   checkDeleteAccountData,
+  accountController.deleteAccount
+);
 
 
 module.exports = router
