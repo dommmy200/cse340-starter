@@ -124,25 +124,114 @@ body {
   border-radius: 8px;
   border: #00aeff 7px solid;
 }
-/******* Header Styles ***************/
-/* header {
+/******* Change Account Type Style ***************/
+/* Assuming the form is contained within a main content area or section */
+.account-type-change h2 {
+  color: #343a40; /* Dark heading color */
+  border-bottom: 2px solid #007bff; /* Blue line under the title */
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* --- Message List Styles (for success or error messages) --- */
+.account-type-change ul {
+  list-style: none; /* Remove default bullet points */
+  padding: 15px 20px;
+  margin: 0 0 20px 0;
+  border-radius: 4px;
+  background-color: #f8d7da; /* Light red/pink for error/notice background */
+  border: 1px solid #f5c6cb; /* Border matching the background tone */
+  color: #721c24; /* Dark red text */
+  font-size: 1em;
+}
+
+.account-type-change ul li {
+  margin: 5px 0;
+}
+
+/* You might want a different color for success messages: */
+/*
+.success-message ul {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+*/
+
+/* --- Form Styles --- */
+.account-type-change form {
   display: flex;
-  justify-content: space-between;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
+  flex-direction: column; /* Stack elements vertically */
+  gap: 15px; /* Space between form elements */
+  padding: 25px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
 }
-.site-name a {
-  color: #000;
-  text-decoration: none;
-  font-size: 30px;
+
+/* --- Label Styles --- */
+.account-type-change .account-type-change label {
   font-weight: bold;
+  color: #495057; /* Darker gray for labels */
+  margin-bottom: 5px;
 }
-.tools a {
-  color: #000;
+
+/* --- Select Input Styles --- */
+.account-type-change select {
+  width: 100%; /* Full width within the form container */
+  padding: 10px 15px;
+  margin-bottom: 10px; /* Extra space before the next label/button */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  /* Custom arrow for select element (optional, browser dependent) */
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="%23343a40" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px; /* Space for the custom arrow */
+}
+
+.account-type-change select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* --- Submit Button Styles --- */
+.account-type-change button[type="submit"] {
+  background-color: #28a745; /* Green for "Update" (a successful action) */
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.account-type-change button[type="submit"]:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* --- Back Link Styles --- */
+.account-type-change a[href="/account/management"] {
+  display: inline-block;
+  margin-top: 25px;
+  font-size: 1em;
+  color: #007bff; /* Standard link blue */
   text-decoration: none;
-  font-size: 16px;
-} */
+  transition: color 0.2s;
+}
+
+.account-type-change a[href="/account/management"]:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
 /*==========================
   1. Header Container Styles 
 ========================== */

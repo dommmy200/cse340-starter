@@ -382,4 +382,75 @@ accountController.deleteAccount = async (req, res, next) => {
     })
   }
 }
+
+/* ****************************************
+*  Render the account type update page (Admin only)
+* ************************************ */
+accountController.buildChangeAccountType = async (req, res) => {
+  try {
+    const nav = await utilities.getNav()
+
+    // Fetch all accounts for Admin to choose from
+    const accounts = await accountModel.getAllAccounts()
+    res.render("account/change-account-type", {
+      title: "Change Account Type",
+      nav,
+      accounts,
+      message: null,
+    })
+  } catch (error) {
+    console.error("Error loading change account type view:", error)
+    res.status(500).send("Error loading page.")
+  }
+}
+
+/* ****************************************
+*  Handle account type change (Admin only)
+* ************************************ */
+accountController.changeAccountType = async (req, res) => {
+  try {
+    const { account_id, new_type } = req.body
+    const nav = await utilities.getNav()
+
+    // Simple validation
+    if (!account_id || !new_type) {
+      const accounts = await accountModel.getAllAccounts()
+      return res.render("account/change-account-type", {
+        title: "Change Account Type",
+        nav,
+        accounts,
+        message: "⚠️ Please select an account and a new type.",
+      })
+    }
+
+    const updatedAccount = await accountModel.updateAccountType(account_id, new_type)
+
+    if (!updatedAccount) {
+      const accounts = await accountModel.getAllAccounts()
+      return res.render("account/change-account-type", {
+        title: "Change Account Type",
+        nav,
+        accounts,
+        message: "❌ Failed to update account type. Try again.",
+      })
+    }
+    // Success message
+    const accounts = await accountModel.getAllAccounts()
+    res.render("account/change-account-type", {
+      title: "Change Account Type",
+      nav,
+      accounts,
+      message: `✅ Account ID ${account_id} updated to ${new_type}.`,
+    })
+  } catch (error) {
+    console.error("Error changing account type:", error)
+    res.status(500).render("account/change-account-type", {
+      title: "Change Account Type",
+      nav: await utilities.getNav(),
+      accounts: await accountModel.getAllAccounts(),
+      message: "⚠️ Something went wrong. Please try again.",
+    })
+  }
+}
+
 module.exports = accountController

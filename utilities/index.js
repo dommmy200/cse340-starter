@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const jwt = require("jsonwebtoken")
 
 // Serve "upgrades" folder as static files
 app.use('/upgrades', express.static(path.join(process.cwd(), 'public')));
@@ -427,4 +428,64 @@ Util.passwordChangeRules = [
       return true
     }),
 ]
+
+/* ****************************************
+*  Check if user is Admin
+* ************************************ */
+Util.checkAdmin = (req, res, next) => {
+  console.log("AccountData in checkAdmin:", res.locals.accountData)
+  if (res.locals.accountData && res.locals.accountData.account_type === "Admin") {
+    next()
+  } else {
+    req.flash("notice", "Unauthorized access. Admins only.")
+    return res.redirect("/account/login")
+  }
+}
+/* ****************************************
+ *  Validate JWT Token
+ * ************************************ */
+Util.checkJWTToken = (req, res, next) => {
+  const token = req.cookies.jwt
+  if (!token) {
+    res.locals.loggedin = false
+    return next()
+  }
+  console.log("Decoded JWT:", decoded)
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      console.error("JWT verification failed:", err)
+      res.locals.loggedin = false
+      return next()
+    }
+    res.locals.accountData = decoded
+    res.locals.loggedin = true
+    next()
+  })
+}
+/* ****************************************
+ *  Check JWT Token and verify user session
+ * **************************************** */
+Util.checkJWTToken = (req, res, next) => {
+  const token = req.cookies.jwt
+  if (!token) {
+    // No token means not logged in
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+
+    // Attach user data to res.locals for later use
+    res.locals.accountData = decoded
+    res.locals.loggedin = true
+    next()
+  } catch (err) {
+    console.error("JWT verification failed:", err)
+    req.flash("notice", "Session expired. Please log in again.")
+    res.clearCookie("jwt")
+    return res.redirect("/account/login")
+  }
+}
 module.exports = Util

@@ -10,48 +10,7 @@ const utilities = require("../utilities")
 const { passwordChangeRules, updateAccountRules } = require("../utilities")
 const { checkAuth } = require('../middleware/auth')
 const { deleteAccountRules, checkDeleteAccountData } = require('../validators/accountValidation')
-
-// // Validation for updating account info
-// const updateAccountRules = [
-//   body("account_firstname")
-//     .trim()
-//     .isLength({ min: 2 })
-//     .withMessage("First name must be at least 2 characters long."),
-//   body("account_lastname")
-//     .trim()
-//     .isLength({ min: 2 })
-//     .withMessage("Last name must be at least 2 characters long."),
-//   body("account_email")
-//     .trim()
-//     .isEmail()
-//     .withMessage("Please enter a valid email address.")
-//     .custom(async (value, { req }) => {
-//       const account = await accountModel.getAccountByEmail(value)
-//       if (account && account.account_id != req.body.account_id) {
-//         throw new Error("This email is already in use by another account.")
-//       }
-//     }),
-// ]
-// // Validation for changing password
-// const passwordChangeRules = [
-//   body("new_password")
-//     .trim()
-//     .isLength({ min: 12 })
-//     .withMessage("Password must be at least 12 characters long.")
-//     .matches(/[A-Z]/)
-//     .withMessage("Password must contain at least one uppercase letter.")
-//     .matches(/\d/)
-//     .withMessage("Password must contain at least one number.")
-//     .matches(/[!@#$%^&*(),.?":{}|<>]/)
-//     .withMessage("Password must contain at least one special character."),
-//   body("confirm_password")
-//     .custom((value, { req }) => {
-//       if (value !== req.body.new_password) {
-//         throw new Error("Passwords do not match.")
-//       }
-//       return true
-//     }),
-// ]
+// const { checkJWTToken } = require("../middleware/auth")
 
 /* ***********************
  * Deliver login view
@@ -80,6 +39,9 @@ router.get(
   accountController.buildDeleteAccount
 );
 
+/* *******************************************
+*  Additional Enhancements:  Admin-only access
+**********************************************/
 router.post(
   "/delete",
   utilities.checkLogin,
@@ -87,6 +49,22 @@ router.post(
 //   checkDeleteAccountData,
   accountController.deleteAccount
 );
+
+router.get(
+  "/change-type",
+  utilities.checkJWTToken,
+  utilities.checkLogin,
+  utilities.checkAdmin,
+  accountController.buildChangeAccountType
+)
+
+router.post(
+  "/change-type",
+  utilities.checkJWTToken,
+  utilities.checkLogin,
+  utilities.checkAdmin, 
+  accountController.changeAccountType
+)
 
 
 module.exports = router

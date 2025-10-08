@@ -23,4 +23,11 @@
     <h2>Danger Zone</h2>
     <a href="/account/delete" class="delete-link">Delete My Account</a>
   </section>
+  <% if (account_type === 'Admin') { %>
+    <section class="danger-zone">
+      <h2>Account Type</h2>
+      <a href="/account/change-type" class="change-link">Change Type</a>
+    </section>
+  <% } %>
+
 </div>

@@ -40,6 +40,28 @@ async function getAccountByEmail (account_email) {
   }
 }
 /* *****************************
+* Return account data using lastname
+* ***************************** */
+// async function getAllAccounts() {
+//   const result = await pool.query("SELECT * FROM public.account ORDER BY account_lastname")
+//   return result.rows
+// }
+/* ****************************************
+*  Get all accounts
+* ************************************ */
+async function getAllAccounts() {
+  try {
+    const result = await pool.query(
+      "SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM public.account ORDER BY account_id"
+    )
+    return result.rows
+  } catch (error) {
+    console.error("getAllAccounts error:", error)
+    throw error
+  }
+}
+
+/* *****************************
 * Return account data using email address
 * ***************************** */
 async function getAccountById (account_id) {
@@ -93,4 +115,20 @@ async function deleteAccount(accountId) {
     throw error;
   }
 }
-module.exports = { getLoginId, registerAccount, getAccountByEmail, getAccountById, updateAccount, updatePassword, deleteAccount }
+/* ****************************************
+*  Update account type (Admin only)
+* ************************************ */
+async function updateAccountType(accountId, newType) {
+  try {
+    const result = await pool.query(
+      // "UPDATE public.account SET account_type = $1 WHERE account_id = $2 RETURNING *",
+      "UPDATE public.account SET account_type = $1 WHERE account_id = $2 RETURNING account_id, account_type",
+      [newType, accountId]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error("updateAccountType error:", error)
+    throw error
+  }
+}
+module.exports = { getLoginId, registerAccount, getAccountByEmail, getAccountById, updateAccount, updatePassword, deleteAccount, updateAccountType, getAllAccounts }
